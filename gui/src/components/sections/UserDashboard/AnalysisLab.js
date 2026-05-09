@@ -18,12 +18,10 @@ const AnalysisLab = () => {
         try {
             const data = await PredictService.predict(type, input);
 
-            // Pobieramy prawdopodobieństwo (obsługa formatu 0-1 lub 0-100)
             const probValue = data.prediction.confidence;
             const percentage = probValue <= 1 ? Math.round(probValue * 100) : Math.round(probValue);
             const explanation = data.prediction.explanation || "Brak dodatkowych informacji.";
 
-            // Logika wykrywania statusu na podstawie procentów
             let status = 'safe';
             let title = 'TREŚĆ WYDAJE SIĘ BEZPIECZNA';
 
@@ -52,12 +50,11 @@ const AnalysisLab = () => {
         }
     };
 
-    // Funkcje pomocnicze do stylizacji w zależności od statusu
     const getContainerStyles = (status) => {
         switch (status) {
             case 'danger': return 'bg-red-50 border-red-200 text-red-900';
             case 'warning': return 'bg-amber-50 border-amber-200 text-amber-900';
-            default: return 'bg-emerald-50 border-emerald-200 text-emerald-900'; // safe
+            default: return 'bg-emerald-50 border-emerald-200 text-emerald-900';
         }
     };
 
@@ -65,7 +62,7 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return 'bg-red-100 text-red-600';
             case 'warning': return 'bg-amber-100 text-amber-600';
-            default: return 'bg-emerald-100 text-emerald-600'; // safe
+            default: return 'bg-emerald-100 text-emerald-600';
         }
     };
 
@@ -73,7 +70,7 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return 'bg-red-500';
             case 'warning': return 'bg-amber-500';
-            default: return 'bg-emerald-500'; // safe
+            default: return 'bg-emerald-500';
         }
     };
 
@@ -81,19 +78,19 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return <ShieldAlert size={32} />;
             case 'warning': return <AlertTriangle size={32} />;
-            default: return <ShieldCheck size={32} />; // safe
+            default: return <ShieldCheck size={32} />;
         }
     };
 
     return (
-        <div className="glass-card p-8 rounded-[32px] mb-8 relative overflow-hidden border border-white/40 shadow-xl">
+        <div className="p-8 rounded-[32px] mb-8 relative overflow-hidden bg-white/80 backdrop-blur-xl border border-white/50 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-xl text-blue-600">
+                    <div className="p-2 bg-purple-100 rounded-xl text-purple-600">
                         <Zap size={24} fill="currentColor" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 leading-none">Laboratorium SafeGuard</h2>
+                        <h2 className="text-2xl font-bold text-slate-900 leading-none">Weryfikator Wiadomości</h2>
                         <p className="text-sm text-slate-500 mt-1">Analiza AI w czasie rzeczywistym</p>
                     </div>
                 </div>
@@ -101,13 +98,13 @@ const AnalysisLab = () => {
                 <div className="flex bg-slate-100 p-1 rounded-xl">
                     <button
                         onClick={() => setType('sms')}
-                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'sms' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}
+                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'sms' ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-500'}`}
                     >
                         <Smartphone size={16} /> SMS
                     </button>
                     <button
                         onClick={() => setType('email')}
-                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'email' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}
+                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'email' ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-500'}`}
                     >
                         <Mail size={16} /> E-mail
                     </button>
@@ -119,7 +116,7 @@ const AnalysisLab = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={`Wklej tutaj treść ${type === 'sms' ? 'SMS-a' : 'e-maila'} do sprawdzenia...`}
-                    className="w-full h-36 p-6 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all resize-none text-slate-700 font-medium"
+                    className="w-full h-36 p-6 bg-slate-50/50 border-2 border-dashed border-purple-200 focus:border-solid focus:border-purple-500 rounded-2xl shadow-inner outline-none transition-all resize-none text-slate-700 font-medium"
                 />
 
                 <div className="absolute bottom-4 right-4 flex gap-3">
@@ -149,7 +146,6 @@ const AnalysisLab = () => {
                                 <h3 className="font-black text-xl mb-1">{result.title}</h3>
                                 <p className="font-medium opacity-80 text-sm md:text-base">{result.description}</p>
 
-                                {/* Sekcja Procentowa */}
                                 {result.probability !== undefined && (
                                     <div className="mt-4">
                                         <div className="flex justify-between items-center mb-1">
@@ -180,3 +176,4 @@ const AnalysisLab = () => {
 };
 
 export default AnalysisLab;
+

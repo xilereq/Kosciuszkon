@@ -72,7 +72,7 @@ const Login = ({onLoginSuccess}) => {
                     <SubmitButton label="Zaloguj" loading={loading} disabled={loading} />
                 </div>
                 <div className="text-sm text-center text-gray-500">
-                    <p>Nie masz konta? <Link to="/register" className="text-indigo-600 hover:underline">Zarejestruj się</Link></p>
+                    <p>Nie masz konta? <Link to="/register" className="text-purple-600 hover:underline">Zarejestruj się</Link></p>
                 </div>
             </form>
         </AuthLayout>
