@@ -9,4 +9,5 @@ class ScanRequest(BaseModel):
 
 class ScanResponse(BaseModel):
     status: str
-    message: str
+    message: Optional[str] = None
+    confidence: Optional[float] = None
