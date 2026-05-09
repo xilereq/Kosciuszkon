@@ -1,19 +1,28 @@
 import logging
+import os
 
 from groq import Groq
 
 logger = logging.getLogger(__name__)
 
-try:
-    client = Groq()
-except Exception as e:
-    logger.error(f"Nie udało się zainicjalizować klienta Groq. Sprawdź czy GROQ_API_KEY jest w .env: {e}")
-    client = None
+def get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
 
+    if not api_key:
+        logger.error("Błąd: Zmienna GROQ_API_KEY jest pusta lub nie została załadowana z .env!")
+        return None
+
+    try:
+        return Groq(api_key=api_key)
+    except Exception as e:
+        logger.error(f"Nie udało się zainicjalizować klienta Groq: {e}")
+        return None
 
 def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> str:
+    client = get_groq_client()
+
     if not client:
-        return "System LLM jest obecnie niedostępny."
+        return "System LLM jest obecnie niedostępny (Brak konfiguracji API)."
 
     confidence_percent = round(confidence * 100, 1)
 
@@ -42,7 +51,7 @@ def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> st
                     "content": prompt,
                 }
             ],
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             temperature=0.2,
             max_tokens=256,
         )
