@@ -46,7 +46,7 @@ const FamilyDashboard = () => {
             setMemberEvents(events);
         } catch (err) {
             setMemberEvents([
-                { id: 1, type: 'sms', date: '2024-05-20', desc: 'Zablokowano fałszywy link', isThreat: true }
+                { id: 1, type: 'sms', date: '2024-05-20', time: '14:32', source: 'Nadawca: DPD-Info', threatType: 'Phishing (Wyłudzenie danych)', title: 'Podejrzany link do płatności', desc: 'System AI wykrył i zablokował podejrzany link prowadzący do fałszywej strony płatności. Użytkownik został powiadomiony, link został zidentyfikowany jako próba wyłudzenia danych karty.' }
             ]);
         } finally { setIsModalLoading(false); }
     };
