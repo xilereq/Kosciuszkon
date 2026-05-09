@@ -13,7 +13,7 @@ const MemberList = ({ family, onOpenReport }) => (
                     const notifications = member.notifications || 0;
 
                     return (
-                        <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-slate-200 rounded-2xl hover:border-purple-300 group">
+                        <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-purple-50 shadow-sm hover:shadow-lg hover:shadow-purple-500/15 hover:border-purple-200 hover:-translate-y-1 transition-all duration-300 rounded-2xl group">
                             <div className="flex items-center gap-4">
                                 <div className="p-3 bg-purple-50 rounded-xl group-hover:bg-purple-100">
                                     <UserCircle size={28} className="text-purple-600" />

@@ -58,16 +58,16 @@ const FamilyDashboard = () => {
             <div className="max-w-6xl mx-auto">
                 <FamilyHeader />
 
-                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 mb-8">
+                <div className="bg-white/60 backdrop-blur-2xl p-8 rounded-[32px] shadow-2xl shadow-purple-900/10 border border-white/50 relative overflow-hidden mb-8">
                     {family ? (
                         <div className="space-y-8">
                             {!isSupervisor && (
-                                <div className="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl flex items-center gap-4 text-emerald-800">
+                                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-6 rounded-2xl flex items-center gap-5 shadow-inner">
                                     <div className="bg-emerald-500 text-white p-2 rounded-full">
                                         <ShieldCheck size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-lg">Jesteś chroniony</p>
+                                        <p className="font-bold text-lg text-slate-900">Jesteś chroniony</p>
                                         <p className="text-sm opacity-90">Należysz do grupy: <span className="font-black underline">{family.family_name || family.name}</span></p>
                                     </div>
                                 </div>
