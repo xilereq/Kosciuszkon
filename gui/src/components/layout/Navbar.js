@@ -20,8 +20,8 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20 items-center">
                     <div className="flex items-center gap-2">
-                        <ShieldCheck className="w-10 h-10 text-blue-600" />
-                        <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
+                        <ShieldCheck className="w-10 h-10 text-purple-600" />
+                        <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
                             SafeGuard AI
                         </span>
                     </div>
@@ -29,18 +29,18 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     <div className="hidden md:flex items-center gap-8 font-medium">
                         {!isAuthenticated ? (
                             <>
-                                <a href="/#features" className="hover:text-blue-600 transition">Funkcje</a>
-                                <a href="/#family" className="hover:text-blue-600 transition">Dla Rodziny</a>
-                                <Link to="/login" className="hover:text-blue-600 transition">Logowanie</Link>
-                                <Link to="/register" className="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                <a href="/#features" className="hover:text-purple-600 transition">Funkcje</a>
+                                <a href="/#family" className="hover:text-purple-600 transition">Dla Rodziny</a>
+                                <Link to="/login" className="hover:text-purple-600 transition">Logowanie</Link>
+                                <Link to="/register" className="bg-purple-600 text-white px-6 py-2.5 rounded-full hover:bg-purple-700 transition shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 hover:-translate-y-0.5">
                                     Zarejestruj się
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link to="/" className="hover:text-blue-600 transition">Mój Panel</Link>
+                                <Link to="/" className="hover:text-purple-600 transition">Mój Panel</Link>
                                 {/* Poniższy link jest teraz widoczny dla każdego zalogowanego */}
-                                <Link to="/family" className="hover:text-blue-600 transition">Dla Rodziny</Link>
+                                <Link to="/family" className="hover:text-purple-600 transition">Dla Rodziny</Link>
                                 <button
                                     onClick={handleLogout}
                                     className="text-red-600 font-bold hover:bg-red-50 px-4 py-2 rounded-lg transition"
@@ -62,7 +62,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     <div className="md:hidden mt-4 pb-4 flex flex-col gap-3">
                         {!isAuthenticated ? (
                             <>
-                                <a href="#features" className="hover:text-blue-600">Funkcje</a>
+                                <a href="#features" className="hover:text-purple-600">Funkcje</a>
                                 <Link to="/login">Logowanie</Link>
                                 <Link to="/register">Rejestracja</Link>
                             </>

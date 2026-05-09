@@ -14,7 +14,7 @@ const Partners = () => {
                 <div className="bg-white p-8 rounded-3xl border border-slate-200 max-w-2xl mx-auto">
                     <h4 className="font-bold text-xl mb-2">Chroń swoich klientów z nami</h4>
                     <p className="text-slate-600 mb-4">Dołącz do firm dbających o bezpieczeństwo Polaków. Wyświetlaj swoje reklamy i kody rabatowe za pomyślne przejście symulacji.</p>
-                    <button className="text-blue-600 font-bold hover:underline">Zostań Partnerem →</button>
+                    <button className="text-purple-600 font-bold hover:underline">Zostań Partnerem →</button>
                 </div>
             </div>
         </section>

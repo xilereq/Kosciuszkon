@@ -12,17 +12,17 @@ const Hero = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
-                        Twoja Tarcza w <span className="text-blue-600">Cyfrowym Świecie.</span>
+                        Twoja Tarcza w <span className="bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">Cyfrowym Świecie.</span>
                     </h1>
                     <p className="text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
                         Kompleksowa ochrona przed phishingiem, prosta edukacja i cyfrowy parasol nad Twoimi bliskimi.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-200">
+                        <button className="flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-xl shadow-purple-500/40">
                             Zainstaluj darmową wtyczkę <ChevronRight className="w-5 h-5" />
                         </button>
-                        <button className="flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 px-8 py-4 rounded-2xl text-lg font-bold hover:border-blue-400 transition-all">
-                            <Beaker className="w-5 h-5 text-blue-500" /> Zaloguj do Laboratorium
+                        <button className="flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 px-8 py-4 rounded-2xl text-lg font-bold hover:border-purple-400 hover:bg-purple-50 transition-all">
+                            <Beaker className="w-5 h-5 text-purple-500" /> Zaloguj do Laboratorium
                         </button>
                     </div>
                 </motion.div>
@@ -53,7 +53,7 @@ const Hero = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-60" />
+                    <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-purple-300 rounded-full blur-3xl opacity-40" />
                 </motion.div>
             </div>
         </section>

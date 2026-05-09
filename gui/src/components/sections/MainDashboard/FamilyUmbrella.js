@@ -14,14 +14,15 @@ const FamilyStatus = ({ name, status, color, alert }) => (
 
 const FamilyUmbrella = () => {
     return (
-        <section id="family" className="py-24 bg-blue-600 text-white">
-            <div className="max-w-7xl mx-auto px-4 text-center">
-                <div className="inline-flex items-center gap-2 bg-blue-500 px-4 py-2 rounded-full mb-6">
+        <section id="family" className="py-24 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden text-white">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-600/20 blur-[100px] rounded-full pointer-events-none" />
+            <div className="max-w-7xl mx-auto px-4 text-center relative">
+                <div className="inline-flex items-center gap-2 bg-purple-500 px-4 py-2 rounded-full mb-6">
                     <Users className="w-5 h-5" />
                     <span className="font-bold uppercase tracking-wider text-sm">Family Dashboard</span>
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-extrabold mb-8">Bezpieczna Sieć Rodzinna</h2>
-                <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-16 leading-relaxed">
+                <p className="text-xl text-purple-100 max-w-3xl mx-auto mb-16 leading-relaxed">
                     Dostań powiadomienie PUSH, gdy Twoja Babcia lub Dziadek spróbuje wejść w podejrzany link.
                     Zainterweniuj, zanim stracą oszczędności życia.
                 </p>

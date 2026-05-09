@@ -13,10 +13,10 @@ const MemberList = ({ family, onOpenReport }) => (
                     const notifications = member.notifications || 0;
 
                     return (
-                        <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-slate-200 rounded-2xl hover:border-blue-300 group">
+                        <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-slate-200 rounded-2xl hover:border-purple-300 group">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100">
-                                    <UserCircle size={28} className="text-blue-600" />
+                                <div className="p-3 bg-purple-50 rounded-xl group-hover:bg-purple-100">
+                                    <UserCircle size={28} className="text-purple-600" />
                                 </div>
                                 <div className="text-left">
                                     <span className="font-bold text-slate-800 text-lg block leading-none mb-2">{name}</span>
@@ -26,7 +26,7 @@ const MemberList = ({ family, onOpenReport }) => (
                                     </div>
                                 </div>
                             </div>
-                            <ChevronRight className="text-slate-300 group-hover:text-blue-600" size={20} />
+                            <ChevronRight className="text-slate-300 group-hover:text-purple-600" size={20} />
                         </button>
                     );
                 })}

@@ -12,14 +12,14 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                         <h2 className="text-2xl font-black text-slate-900">Raport Bezpieczeństwa</h2>
                         <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full"><X size={24} /></button>
                     </div>
-                    <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-2xl mb-6">
-                        <div className="h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold">{(member.name || 'U').slice(0,1)}</div>
+                    <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-2xl mb-6">
+                        <div className="h-12 w-12 bg-purple-600 rounded-xl flex items-center justify-center text-white font-bold">{(member.name || 'U').slice(0,1)}</div>
                         <div><div className="font-bold">{member.name || member.username}</div><div className="text-sm text-slate-500 flex items-center gap-1"><History size={14} /> Ostatnie incydenty</div></div>
                     </div>
                     <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
                         {isLoading ? <div className="text-center py-10">Ładowanie...</div> : events.map(evt => (
                             <div key={evt.id} className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                <div className={`p-2 rounded-lg ${evt.type === 'sms' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'}`}>
+                                <div className={`p-2 rounded-lg ${evt.type === 'sms' ? 'bg-amber-100 text-amber-600' : 'bg-purple-100 text-purple-600'}`}>
                                     {evt.type === 'sms' ? <Smartphone size={20} /> : <Mail size={20} />}
                                 </div>
                                 <div>

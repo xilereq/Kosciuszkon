@@ -2,9 +2,9 @@ import React from 'react';
 import { Users, Loader2, Bell } from 'lucide-react';
 
 const FamilySidebar = ({ family, loading }) => (
-    <div className="bg-blue-600 p-8 rounded-3xl shadow-xl text-white">
+    <div className="bg-gradient-to-b from-purple-600 to-purple-800 p-8 rounded-3xl shadow-xl shadow-purple-900/20 text-white relative overflow-hidden">
         <div className="flex items-center gap-3 mb-6">
-            <Users className="w-8 h-8 text-blue-200" />
+            <Users className="w-8 h-8 text-purple-200" />
             <h2 className="text-xl font-bold">Bezpieczna Sieć Rodzinna</h2>
         </div>
         <div className="space-y-4">

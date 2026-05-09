@@ -89,7 +89,7 @@ const AnalysisLab = () => {
         <div className="glass-card p-8 rounded-[32px] mb-8 relative overflow-hidden border border-white/40 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-xl text-blue-600">
+                    <div className="p-2 bg-purple-100 rounded-xl text-purple-600">
                         <Zap size={24} fill="currentColor" />
                     </div>
                     <div>
@@ -101,13 +101,13 @@ const AnalysisLab = () => {
                 <div className="flex bg-slate-100 p-1 rounded-xl">
                     <button
                         onClick={() => setType('sms')}
-                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'sms' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}
+                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'sms' ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-500'}`}
                     >
                         <Smartphone size={16} /> SMS
                     </button>
                     <button
                         onClick={() => setType('email')}
-                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'email' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}
+                        className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${type === 'email' ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-500'}`}
                     >
                         <Mail size={16} /> E-mail
                     </button>
@@ -119,7 +119,7 @@ const AnalysisLab = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={`Wklej tutaj treść ${type === 'sms' ? 'SMS-a' : 'e-maila'} do sprawdzenia...`}
-                    className="w-full h-36 p-6 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all resize-none text-slate-700 font-medium"
+                    className="w-full h-36 p-6 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 outline-none transition-all resize-none text-slate-700 font-medium"
                 />
 
                 <div className="absolute bottom-4 right-4 flex gap-3">
@@ -180,3 +180,4 @@ const AnalysisLab = () => {
 };
 
 export default AnalysisLab;
+

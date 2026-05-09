@@ -4,7 +4,7 @@ import { ShieldCheck, AlertTriangle, Smartphone, Mail } from 'lucide-react';
 const ActiveShield = ({ events }) => (
     <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
         <div className="flex items-center gap-3 mb-6">
-            <ShieldCheck className="w-8 h-8 text-blue-600" />
+            <ShieldCheck className="w-8 h-8 text-purple-600" />
             <h2 className="text-2xl font-bold text-slate-900">Aktywna Tarcza</h2>
         </div>
         <div className="space-y-4">

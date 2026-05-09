@@ -79,7 +79,7 @@ const ChatbotModal = ({ onClose }) => {
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[80%] p-4 rounded-2xl ${
                                 msg.role === 'user'
-                                    ? 'bg-blue-600 text-white rounded-tr-sm'
+                                    ? 'bg-purple-600 text-white rounded-tr-sm'
                                     : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm whitespace-pre-wrap'
                             }`}>
                                 {msg.content}
@@ -89,7 +89,7 @@ const ChatbotModal = ({ onClose }) => {
                     {isLoading && (
                         <div className="flex justify-start">
                             <div className="bg-white border border-slate-200 p-4 rounded-2xl rounded-tl-sm flex items-center gap-2">
-                                <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                                <Loader2 className="w-5 h-5 animate-spin text-purple-600" />
                                 <span className="text-slate-500 text-sm">AI analizuje sytuację...</span>
                             </div>
                         </div>
@@ -107,7 +107,7 @@ const ChatbotModal = ({ onClose }) => {
                                 <button
                                     key={idx}
                                     onClick={() => handleSend(reply)}
-                                    className="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-3 py-2 rounded-full hover:bg-blue-100 transition-colors text-left"
+                                    className="text-xs bg-purple-50 text-purple-700 border border-purple-200 px-3 py-2 rounded-full hover:bg-purple-100 transition-colors text-left"
                                 >
                                     {reply}
                                 </button>
@@ -116,7 +116,7 @@ const ChatbotModal = ({ onClose }) => {
                     )}
 
                     <div className="p-4">
-                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-100 transition-all">
                             <input
                                 type="text"
                                 value={input}
@@ -129,7 +129,7 @@ const ChatbotModal = ({ onClose }) => {
                             <button
                                 onClick={() => handleSend()}
                                 disabled={isLoading || !input.trim()}
-                                className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 transition-colors"
+                                className="bg-purple-600 text-white p-3 rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:hover:bg-purple-600 transition-colors"
                             >
                                 <Send size={20} />
                             </button>
@@ -142,3 +142,4 @@ const ChatbotModal = ({ onClose }) => {
 };
 
 export default ChatbotModal;
+
