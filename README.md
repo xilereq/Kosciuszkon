@@ -4,7 +4,7 @@ System składający się z aplikacji oraz wtycznki internetowej (docelowo równi
 
 ## 📖 Spis Treści
 * [Wizja Projektu](#-wizja-projektu)
-* [Główne Moduły)](#-główne-moduły)
+* [Główne Moduły](#-główne-moduły)
 * [Architektura Projektu](#-architektura-projektu)
 * [Instalacja i Uruchomienie](#-instalacja-i-uruchomienie)
 
