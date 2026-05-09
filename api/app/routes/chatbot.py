@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+
 from app.services.chatbot_service import generate_chat_response
 
 chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')

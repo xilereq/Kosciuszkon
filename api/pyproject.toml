@@ -16,7 +16,14 @@ dependencies = [
     "sqlalchemy>=2.0",
     "psycopg2-binary",
     "pydantic",
-    "groq"
+    "groq",
+    "google-generativeai",
+    "pytest",
+    "joblib",
+    "pandas",
+    "scikit-learn",
+    "deep_translator",
+    "langdetect"
 ]
 
 [tool.setuptools]

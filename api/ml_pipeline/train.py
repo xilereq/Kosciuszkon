@@ -1,11 +1,12 @@
+import os
+
+import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-import joblib
-import os
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)

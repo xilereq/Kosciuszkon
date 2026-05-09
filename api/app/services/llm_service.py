@@ -1,6 +1,8 @@
 import logging
 import os
 
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from groq import Groq
 
 logger = logging.getLogger(__name__)
@@ -15,6 +17,19 @@ def get_groq_client():
     except Exception as e:
         logger.error(f"Nie udało się zainicjalizować klienta Groq: {e}")
         return None
+
+def configure_gemini():
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        logger.error("Błąd: Zmienna GEMINI_API_KEY jest pusta lub nie została załadowana z .env!")
+        return False
+
+    try:
+        genai.configure(api_key = api_key)
+        return True
+    except Exception as e:
+        logger.error(f"Nie udało się skonfigurować API Gemini: {e}")
+        return False
 
 def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> str:
     client = get_groq_client()
@@ -60,3 +75,50 @@ def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> st
     except Exception as e:
         logger.error(f"Błąd podczas komunikacji z API Groq: {e}")
         return "Wiadomość wykazuje cechy spamu, ale generator szczegółowego opisu jest w tej chwili przeciążony."
+
+
+def generate_training_explanation(text: str, true_label: str, user_guess: str, msg_type: str = "wiadomość") -> str:
+    if not configure_gemini():
+        return "System edukacyjny jest obecnie niedostępny."
+
+    if true_label == 'spam' and user_guess == 'safe':
+        prompt = (
+            f"Użytkownik uznał poniższą wiadomość ({msg_type}) za bezpieczną, ale w rzeczywistości to PHISHING/OSZUSTWO. "
+            f"Bądź dla niego wyrozumiały, ale wskaż mu palcem w 1-2 zdaniach, jakie elementy (tzw. red flags) "
+            f"powinny wzbudzić jego czujność.\nWiadomość:\n\"{text}\""
+        )
+    else:
+        prompt = (
+            f"Użytkownik uznał poniższą wiadomość ({msg_type}) za oszustwo, ale w rzeczywistości to BEZPIECZNY, "
+            f"zwykły komunikat. Wyjaśnij mu w 1-2 zdaniach, dlaczego ta wiadomość nie zawiera cech ataku "
+            f"i dlaczego mógł się pomylić (np. to tylko zwykłe powiadomienie).\nWiadomość:\n\"{text}\""
+        )
+
+    try:
+        model = genai.GenerativeModel(
+            model_name="gemini-2.5-flash",
+            system_instruction=(
+                "Jesteś trenerem cyberbezpieczeństwa. Uczysz użytkowników przez wskazywanie błędów. "
+                "Pisz zwięźle i przystępnie."
+            )
+        )
+
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.3,
+                max_output_tokens=5000,
+            ),
+            safety_settings = {
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+            }
+        )
+
+        return response.text.strip()
+
+    except Exception as e:
+        logger.error(f"Błąd LLM w module treningowym (Gemini): {e}")
+        return "Niestety pomyliłeś się, ale generator szczegółowych wyjaśnień jest w tej chwili przeciążony."
