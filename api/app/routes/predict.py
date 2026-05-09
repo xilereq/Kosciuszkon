@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
+
 from app.services.predict_service import get_prediction
+from app.services.llm_service import generate_spam_explanation
 
 predict_bp = Blueprint('predict', __name__, url_prefix='/api/v1/predict')
 
@@ -10,7 +12,19 @@ def predict_sms():
         return jsonify({"error": "Brak pola 'text'"}), 400
 
     try:
-        result = get_prediction('sms', data['text'])
+        text = data['text']
+        result = get_prediction('sms', text)
+
+        if result.get('is_spam') is True:
+            explanation = generate_spam_explanation(
+                text,
+                msg_type = 'sms',
+                confidence = result.get('confidence')
+            )
+            result['explanation'] = explanation
+        else:
+            result['explanation'] = None
+
         return jsonify({"type": "sms", "prediction": result}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -23,7 +37,19 @@ def predict_email():
         return jsonify({"error": "Brak pola 'text'"}), 400
 
     try:
-        result = get_prediction('email', data['text'])
+        text = data['text']
+        result = get_prediction('email', text)
+
+        if result.get('is_spam') is True:
+            explanation = generate_spam_explanation(
+                text,
+                msg_type = 'email',
+                confidence = result.get('confidence')
+            )
+            result['explanation'] = explanation
+        else:
+            result['explanation'] = None
+
         return jsonify({"type": "email", "prediction": result}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
