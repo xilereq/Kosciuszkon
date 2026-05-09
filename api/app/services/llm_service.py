@@ -44,6 +44,7 @@ def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> st
         f"Wskaż wprost konkretne elementy, które zdradzają oszustwo (np. podejrzany link, presja czasu, żądanie dopłaty).\n\n"
         f"ZASADY:\n"
         f"- Podawaj konkretne informacje, bez zbędnych dodatków."
+        f"- Przekaż treść merytoryczną - wytłumacz w max. 1 krótkim zdaniu dlaczego wiadomość niesie zagrożenie."
         f"- Kategorycznie zabraniam używania słów takich jak 'algorytm', 'system', 'prawdopodobieństwo' czy podawania jakichkolwiek procentów.\n"
         f"- Bądź zwięzły i konkretny.\n\n"
         f"Wiadomość do analizy:\n\"{text}\""
