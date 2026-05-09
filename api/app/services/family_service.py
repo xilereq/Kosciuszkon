@@ -1,8 +1,8 @@
 from flask import abort
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 
 from app.db import session
-from app.models import Family, User, UserFamily
+from app.models import Family, Notification, UserFamily
 from app.schemas import FamilyCreateRequest, FamilyJoinRequest
 
 
@@ -94,14 +94,23 @@ def get_family_members(user_id):
             )
         ).all()
 
+        members_list = []
+
+        for m in query_results:
+            count = db.query(func.count(Notification.id)).filter(
+                Notification.user_id == m.user_id
+            ).scalar()
+
+            members_list.append({
+                "name": m.name,
+                "is_admin": m.is_admin,
+                "notification_count": count or 0
+            })
+
         return {
             "family_name": family_name,
-            "members": [{
-                "name": uf.name,
-                "is_admin": uf.is_admin,
-            } for uf in query_results]
+            "members": members_list
         }
-
     except Exception as ex:
         print(f"Błąd: {ex}")
         return None

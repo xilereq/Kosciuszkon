@@ -12,7 +12,8 @@ class Notification(Base):
     id = Column(Integer, primary_key=True)
     family_id = Column(Integer, ForeignKey('families.id'),
                        nullable=False)
-
+    user_id = Column(Integer, ForeignKey('users.id'),
+                     nullable=False)
     title = Column(String(2000), nullable=False)
     sender = Column(String(500), nullable=False)
     probability = Column(Float, nullable=False)

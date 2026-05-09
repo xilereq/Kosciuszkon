@@ -1,6 +1,7 @@
 from app.services.llm_service import generate_spam_explanation
 from app.services.predict_service import get_prediction
 
+
 def analyze_text_content(text: str) -> dict:
     try:
         prediction_result = get_prediction('email', text)

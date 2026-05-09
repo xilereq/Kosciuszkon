@@ -22,6 +22,7 @@ class AddFamilyMemberResponse(BaseModel):
 class FamilyMemberResponse(BaseModel):
     name: str
     is_admin: bool
+    notification_count: int
 
     class Config:
         from_attributes = True
