@@ -3,7 +3,6 @@ import { Gamepad2 } from 'lucide-react';
 
 const AwarenessTrainingCard = () => (
     <div className="bg-slate-900 text-white rounded-3xl p-8 relative overflow-hidden shadow-2xl shadow-purple-900/20">
-        {/* dekoracyjne rozmyte kółko */}
         <div className="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-purple-600/30 blur-2xl pointer-events-none" />
 
         <div className="flex items-center gap-3 mb-4 relative z-10">

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 const Hero = () => {
     return (
         <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 relative overflow-hidden">
-            {/* decorative orbs */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-20">
                 <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-purple-300/20 blur-[120px]" />
                 <div className="absolute top-[20%] -right-[10%] w-[40%] h-[40%] rounded-full bg-fuchsia-300/20 blur-[120px]" />

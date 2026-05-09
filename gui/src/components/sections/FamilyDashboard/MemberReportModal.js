@@ -27,11 +27,9 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                         ) : (
                             events.length > 0 ? events.map(evt => (
                                 <div key={evt.id} className="relative">
-                                    {/* Akcent powagi */}
                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500 rounded-l-2xl" />
 
                                     <div className="flex flex-col gap-3 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden ml-3">
-                                        {/* Nagłówek karty */}
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center gap-3">
                                                 <div className={`p-2 rounded-lg ${evt.type === 'sms' ? 'bg-amber-100 text-amber-600' : 'bg-purple-100 text-purple-600'}`}>
@@ -48,7 +46,6 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                                             </div>
                                         </div>
 
-                                        {/* Siatka metadanych */}
                                         <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 mb-2">
                                             <div className="flex items-center gap-2"><Clock size={14} /> <span>{evt.date}{evt.time ? ` • ${evt.time}` : ''}</span></div>
                                             <div className="flex items-center gap-2"><MapPin size={14} /> <span>{evt.source || 'Brak danych'}</span></div>
@@ -56,7 +53,6 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                                             <div className="flex items-center gap-2 text-right text-xs text-slate-400"><AlertOctagon size={14} /> <span>{evt.severity || ''}</span></div>
                                         </div>
 
-                                        {/* Sekcja Opisu */}
                                         <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm font-medium text-slate-700 flex items-start gap-2">
                                             <AlertOctagon className="text-red-500 mt-1" size={18} />
                                             <div>{evt.desc}</div>
@@ -77,4 +73,3 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
 );
 
 export default MemberReportModal;
-

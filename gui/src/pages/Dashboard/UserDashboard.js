@@ -1,4 +1,3 @@
-// src/pages/Dashboard/UserDashboard.js
 import React, { useState, useEffect } from 'react';
 import { FamilyService } from '../../services/';
 import {SecurityHeader, FamilySidebar, AnalysisLab, ActiveShield, AwarenessTrainingCard} from '../../components';

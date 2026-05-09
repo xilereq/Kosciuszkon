@@ -18,12 +18,10 @@ const AnalysisLab = () => {
         try {
             const data = await PredictService.predict(type, input);
 
-            // Pobieramy prawdopodobieństwo (obsługa formatu 0-1 lub 0-100)
             const probValue = data.prediction.confidence;
             const percentage = probValue <= 1 ? Math.round(probValue * 100) : Math.round(probValue);
             const explanation = data.prediction.explanation || "Brak dodatkowych informacji.";
 
-            // Logika wykrywania statusu na podstawie procentów
             let status = 'safe';
             let title = 'TREŚĆ WYDAJE SIĘ BEZPIECZNA';
 
@@ -52,12 +50,11 @@ const AnalysisLab = () => {
         }
     };
 
-    // Funkcje pomocnicze do stylizacji w zależności od statusu
     const getContainerStyles = (status) => {
         switch (status) {
             case 'danger': return 'bg-red-50 border-red-200 text-red-900';
             case 'warning': return 'bg-amber-50 border-amber-200 text-amber-900';
-            default: return 'bg-emerald-50 border-emerald-200 text-emerald-900'; // safe
+            default: return 'bg-emerald-50 border-emerald-200 text-emerald-900';
         }
     };
 
@@ -65,7 +62,7 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return 'bg-red-100 text-red-600';
             case 'warning': return 'bg-amber-100 text-amber-600';
-            default: return 'bg-emerald-100 text-emerald-600'; // safe
+            default: return 'bg-emerald-100 text-emerald-600';
         }
     };
 
@@ -73,7 +70,7 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return 'bg-red-500';
             case 'warning': return 'bg-amber-500';
-            default: return 'bg-emerald-500'; // safe
+            default: return 'bg-emerald-500';
         }
     };
 
@@ -81,7 +78,7 @@ const AnalysisLab = () => {
         switch (status) {
             case 'danger': return <ShieldAlert size={32} />;
             case 'warning': return <AlertTriangle size={32} />;
-            default: return <ShieldCheck size={32} />; // safe
+            default: return <ShieldCheck size={32} />;
         }
     };
 
@@ -149,7 +146,6 @@ const AnalysisLab = () => {
                                 <h3 className="font-black text-xl mb-1">{result.title}</h3>
                                 <p className="font-medium opacity-80 text-sm md:text-base">{result.description}</p>
 
-                                {/* Sekcja Procentowa */}
                                 {result.probability !== undefined && (
                                     <div className="mt-4">
                                         <div className="flex justify-between items-center mb-1">
