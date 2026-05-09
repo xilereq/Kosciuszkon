@@ -54,47 +54,75 @@ function showYellowWarning(message, confidence) {
   warning.style.position = "fixed";
   warning.style.top = "20px";
   warning.style.right = "20px";
-  warning.style.width = "300px";
-  warning.style.backgroundColor = "#fef9c3";
+  warning.style.width = "350px";
+  warning.style.backgroundColor = "#ffffff";
   warning.style.border = "1px solid #facc15";
-  warning.style.borderRadius = "8px";
-  warning.style.padding = "16px";
-  warning.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+  warning.style.borderRadius = "16px";
+  warning.style.padding = "24px";
+  warning.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.1)";
   warning.style.zIndex = "999999";
   warning.style.fontFamily = "sans-serif";
+  warning.style.textAlign = "center";
+  warning.style.color = "#1e293b";
 
-  const header = document.createElement("div");
-  header.style.color = "#854d0e";
-  header.style.fontWeight = "bold";
-  header.style.fontSize = "14px";
-  header.style.marginBottom = "8px";
-  header.innerText = "⚠️ Ostrzeżenie (" + confidence + "%)";
+  const iconSvg = document.createElement("div");
+  iconSvg.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="#facc15"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>';
 
-  const body = document.createElement("div");
-  body.style.fontSize = "13px";
-  body.style.color = "#713f12";
-  body.style.lineHeight = "1.4";
-  body.innerText = message;
+  const title = document.createElement("div");
+  title.style.fontSize = "18px";
+  title.style.fontWeight = "bold";
+  title.style.marginTop = "12px";
+  title.style.color = "#0f172a";
+  title.innerText = "Podejrzenie próby phishingu";
 
-  const btn = document.createElement("button");
-  btn.style.marginTop = "12px";
-  btn.style.backgroundColor = "#facc15";
-  btn.style.color = "#422006";
-  btn.style.border = "none";
-  btn.style.borderRadius = "4px";
-  btn.style.padding = "6px 12px";
-  btn.style.fontSize = "12px";
-  btn.style.fontWeight = "bold";
-  btn.style.cursor = "pointer";
-  btn.innerText = "Zrozumiałem";
-  btn.onclick = () => warning.remove();
+  const separator = document.createElement("div");
+  separator.style.height = "1px";
+  separator.style.backgroundColor = "#e2e8f0";
+  separator.style.margin = "16px 0";
 
-  warning.appendChild(header);
-  warning.appendChild(body);
-  warning.appendChild(btn);
+  const contentBox = document.createElement("div");
+  contentBox.style.textAlign = "left";
+  contentBox.style.fontSize = "14px";
+  contentBox.style.lineHeight = "1.5";
+  contentBox.style.color = "#334155";
+  contentBox.style.marginBottom = "20px";
+  contentBox.innerText = message;
+
+  const confidenceText = document.createElement("div");
+  confidenceText.style.fontSize = "12px";
+  confidenceText.style.marginTop = "8px";
+  confidenceText.style.color = "#64748b";
+  confidenceText.innerText = "Prawdopodobieństwo: " + confidence + "%";
+  contentBox.appendChild(confidenceText);
+
+  const understandingButton = document.createElement("button");
+  understandingButton.style.backgroundColor = "#facc15";
+  understandingButton.style.color = "#422006";
+  understandingButton.style.border = "none";
+  understandingButton.style.borderRadius = "25px";
+  understandingButton.style.padding = "10px 0";
+  understandingButton.style.width = "100%";
+  understandingButton.style.fontSize = "14px";
+  understandingButton.style.fontWeight = "bold";
+  understandingButton.style.cursor = "pointer";
+  understandingButton.style.transition = "background-color 0.2s";
+  understandingButton.innerText = "Zrozumiałem";
+
+  understandingButton.onmouseover = () => understandingButton.style.backgroundColor = "#eab308";
+  understandingButton.onmouseout = () => understandingButton.style.backgroundColor = "#facc15";
+
+  understandingButton.addEventListener("click", () => {
+    warning.remove();
+  });
+
+  warning.appendChild(iconSvg);
+  warning.appendChild(title);
+  warning.appendChild(separator);
+  warning.appendChild(contentBox);
+  warning.appendChild(understandingButton);
+
   document.body.appendChild(warning);
 }
-
 function showRedDangerPopup(aiExplanation, confidence) {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
