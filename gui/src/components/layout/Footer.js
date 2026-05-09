@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
                 <div className="col-span-2">
                     <div className="flex items-center gap-2 mb-6">
-                        <ShieldCheck className="w-8 h-8 text-blue-400" />
+                        <ShieldCheck className="w-8 h-8 text-purple-400" />
                         <span className="text-xl font-bold text-white">SafeGuard AI</span>
                     </div>
                     <p className="max-w-xs">Innowacyjna platforma ochrony przed oszustwami cyfrowymi. Misja: Bezpieczny internet dla każdego pokolenia.</p>

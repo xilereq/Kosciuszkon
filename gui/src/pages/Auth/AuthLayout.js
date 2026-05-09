@@ -14,7 +14,7 @@ const AuthLayout = ({ title, subtitle, children }) => {
 
                 <div className="mt-6 text-center text-sm text-gray-500">
                     <p>
-                        Masz już konto? <Link to="/login" className="text-indigo-600 hover:underline">Zaloguj się</Link>
+                        Masz już konto? <Link to="/login" className="text-purple-600 hover:underline">Zaloguj się</Link>
                     </p>
                 </div>
             </div>
