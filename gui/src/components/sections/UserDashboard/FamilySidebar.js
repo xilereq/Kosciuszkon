@@ -1,21 +1,26 @@
 import React from 'react';
-import { Users, Loader2 } from 'lucide-react';
+import { Users, Loader2, Bell } from 'lucide-react';
 
 const FamilySidebar = ({ family, loading }) => (
     <div className="bg-blue-600 p-8 rounded-3xl shadow-xl text-white">
         <div className="flex items-center gap-3 mb-6">
             <Users className="w-8 h-8 text-blue-200" />
-            <h2 className="text-xl font-bold">Parasol Rodzinny</h2>
+            <h2 className="text-xl font-bold">Bezpieczna Sieć Rodzinna</h2>
         </div>
         <div className="space-y-4">
             {loading ? <Loader2 className="animate-spin" /> : family?.members?.length > 0 ? (
                 family.members.map((member, idx) => {
                     const name = typeof member === 'object' ? (member.name || member.username) : member;
-                    const score = member.securityScore ?? 100;
+                    const notifications = member.notifications || ((member.threats || 0) + (member.warnings || 0));
+                    const hasIssues = notifications > 0;
+
                     return (
-                        <div key={idx} className={`p-4 rounded-2xl border ${score < 50 ? 'bg-red-500/30 border-red-400 animate-pulse' : 'bg-white/10 border-white/20'}`}>
-                            <p className="text-xs font-bold mb-1 uppercase opacity-80">{name}</p>
-                            <p className="font-bold text-lg">{score < 50 ? '⚠️ ZAGROŻENIE' : `${score}% Bezpieczny`}</p>
+                        <div key={idx} className={`p-4 rounded-2xl border ${hasIssues ? 'bg-white/20 border-white/40' : 'bg-white/10 border-white/20'}`}>
+                            <p className="font-bold text-lg mb-3">{name}</p>
+                            <div className="flex items-center justify-between text-sm bg-black/10 px-3 py-1.5 rounded-lg">
+                                <span className="flex items-center gap-2 opacity-90"><Bell size={14} /> Powiadomienia:</span>
+                                <span className={`font-black ${hasIssues ? 'text-amber-300' : 'text-emerald-300'}`}>{notifications}</span>
+                            </div>
                         </div>
                     );
                 })

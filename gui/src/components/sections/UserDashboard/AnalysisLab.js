@@ -93,7 +93,7 @@ const AnalysisLab = () => {
                         <Zap size={24} fill="currentColor" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 leading-none">Laboratorium SafeGuard</h2>
+                        <h2 className="text-2xl font-bold text-slate-900 leading-none">Weryfikator Wiadomości</h2>
                         <p className="text-sm text-slate-500 mt-1">Analiza AI w czasie rzeczywistym</p>
                     </div>
                 </div>

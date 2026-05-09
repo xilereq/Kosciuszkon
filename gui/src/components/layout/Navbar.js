@@ -1,25 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ShieldCheck, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { AuthService, FamilyService } from '../../services';
+import { AuthService } from '../../services';
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isSupervisor, setIsSupervisor] = useState(false);
-
-    useEffect(() => {
-        // Pobieramy status supervisora za pomocą amIBoss tylko, gdy użytkownik jest zalogowany
-        if (isAuthenticated) {
-            FamilyService.amIBoss()
-                .then(res => setIsSupervisor(res.is_boss === true))
-                .catch(err => {
-                    console.error("Błąd pobierania roli w nawigacji:", err);
-                    setIsSupervisor(false);
-                });
-        } else {
-            setIsSupervisor(false);
-        }
-    }, [isAuthenticated]);
 
     const handleLogout = async () => {
         try {
@@ -54,11 +39,8 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         ) : (
                             <>
                                 <Link to="/" className="hover:text-blue-600 transition">Mój Panel</Link>
-
-                                {isSupervisor && (
-                                    <Link to="/family" className="hover:text-blue-600 transition">Dla Rodziny</Link>
-                                )}
-
+                                {/* Poniższy link jest teraz widoczny dla każdego zalogowanego */}
+                                <Link to="/family" className="hover:text-blue-600 transition">Dla Rodziny</Link>
                                 <button
                                     onClick={handleLogout}
                                     className="text-red-600 font-bold hover:bg-red-50 px-4 py-2 rounded-lg transition"
@@ -87,11 +69,8 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         ) : (
                             <>
                                 <Link to="/">Mój Panel</Link>
-
-                                {isSupervisor && (
-                                    <Link to="/family">Dla Rodziny</Link>
-                                )}
-
+                                {/* Poniższy link jest teraz widoczny dla każdego zalogowanego w mobile */}
+                                <Link to="/family">Dla Rodziny</Link>
                                 <button onClick={handleLogout} className="text-left text-red-600 font-bold">Wyloguj się</button>
                             </>
                         )}

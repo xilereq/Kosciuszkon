@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCircle, Shield, ChevronRight } from 'lucide-react';
+import { UserCircle, ChevronRight, Bell } from 'lucide-react';
 
 const MemberList = ({ family, onOpenReport }) => (
     <div className="bg-slate-50 rounded-[24px] p-6 flex flex-col items-center border border-dashed border-slate-200">
@@ -10,16 +10,19 @@ const MemberList = ({ family, onOpenReport }) => (
             <div className="w-full flex flex-col gap-3">
                 {family.members.map((member, index) => {
                     const name = typeof member === 'object' ? (member.name || member.username) : member;
-                    const score = member.securityScore || 100;
+                    const notifications = member.notifications || 0;
+
                     return (
                         <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-slate-200 rounded-2xl hover:border-blue-300 group">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100"><UserCircle size={28} className="text-blue-600" /></div>
+                                <div className="p-3 bg-blue-50 rounded-xl group-hover:bg-blue-100">
+                                    <UserCircle size={28} className="text-blue-600" />
+                                </div>
                                 <div className="text-left">
-                                    <span className="font-bold text-slate-800 text-lg block leading-none mb-1.5">{name}</span>
-                                    <div className="flex items-center gap-1.5">
-                                        <Shield size={14} className={score < 90 ? "text-amber-500" : "text-emerald-500"} />
-                                        <span className="text-sm font-medium text-slate-500">Bezpieczeństwo: {score}%</span>
+                                    <span className="font-bold text-slate-800 text-lg block leading-none mb-2">{name}</span>
+                                    <div className={`flex items-center gap-1.5 text-sm font-bold ${notifications > 0 ? 'text-amber-500' : 'text-slate-400'}`}>
+                                        <Bell size={14} />
+                                        <span>Powiadomienia: {notifications}</span>
                                     </div>
                                 </div>
                             </div>

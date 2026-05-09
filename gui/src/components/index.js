@@ -17,7 +17,6 @@ export {default as FamilySidebar} from './sections/UserDashboard/FamilySidebar'
 export {default as SecurityHeader} from './sections/UserDashboard/SecurityHeader'
 
 export {default as FamilyHeader} from './sections/FamilyDashboard/FamilyHeader'
-export {default as FamilyStats} from './sections/FamilyDashboard/FamilyStats'
 export {default as FamilyManagement} from './sections/FamilyDashboard/FamilyManagement'
 export {default as MemberList} from './sections/FamilyDashboard/MemberList'
 export {default as MemberReportModal} from './sections/FamilyDashboard/MemberReportModal'

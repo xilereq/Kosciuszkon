@@ -14,8 +14,6 @@ const Gamification = () => {
                             </div>
                             <div className="space-y-4">
                                 <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-center">
-                                    <div className="text-xs text-slate-400 uppercase tracking-widest">Streak</div>
-                                    <div className="text-3xl font-black">🔥 14 Dni</div>
                                 </div>
                                 <div className="bg-blue-600 p-4 rounded-2xl">
                                     <div className="text-sm font-bold mb-2">Gra: Tinder dla Phishingu</div>

@@ -6,7 +6,7 @@ const FamilyStatus = ({ name, status, color, alert }) => (
         <div className="text-sm opacity-80 mb-2 uppercase tracking-wide">{name}</div>
         <div className="flex items-center justify-center gap-2">
             <div className={`w-3 h-3 rounded-full ${color}`} />
-            <span className="font-bold text-lg italic">{status}</span>
+            <span className="font-bold text-base italic">{status}</span>
         </div>
         {alert && <button className="mt-4 w-full py-2 bg-amber-400 text-amber-900 rounded-xl font-bold text-sm">ZAREAGUJ</button>}
     </div>
@@ -20,16 +20,16 @@ const FamilyUmbrella = () => {
                     <Users className="w-5 h-5" />
                     <span className="font-bold uppercase tracking-wider text-sm">Family Dashboard</span>
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-extrabold mb-8">☂️ Cyfrowy Parasol Rodzinny</h2>
+                <h2 className="text-4xl lg:text-5xl font-extrabold mb-8">Bezpieczna Sieć Rodzinna</h2>
                 <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-16 leading-relaxed">
                     Dostań powiadomienie PUSH, gdy Twoja Babcia lub Dziadek spróbuje wejść w podejrzany link.
                     Zainterweniuj, zanim stracą oszczędności życia.
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                    <FamilyStatus name="Ty" status="100% bezpieczny" color="bg-emerald-400" />
-                    <FamilyStatus name="Mama" status="95% bezpieczna" color="bg-emerald-400" />
-                    <FamilyStatus name="Babcia Krysia" status="⚠️ Zagrożenie!" color="bg-amber-400" alert />
+                    <FamilyStatus name="Ty" status="0 powiadomień" color="bg-emerald-400" />
+                    <FamilyStatus name="Mama" status="1 powiadomienie" color="bg-amber-400" />
+                    <FamilyStatus name="Babcia Krysia" status="4 powiadomienia" color="bg-red-400" alert />
                 </div>
             </div>
         </section>
