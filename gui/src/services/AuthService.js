@@ -1,10 +1,8 @@
 import api from './api';
 
 const authService = {
-    // Rejestracja użytkownika - dane przekazywane do Flask RegisterRequest
     register: async (userData) => {
         try {
-            // Wyślij zarówno `username` jak i `name` — serwer może oczekiwać jednego z nich
             const payload = {
                 username: userData.name || userData.username || userData.email?.split('@')[0],
                 name: userData.name,
@@ -14,7 +12,6 @@ const authService = {
             const response = await api.post('/register', payload);
             return response.data;
         } catch (err) {
-            // Normalizuj błąd, żeby komponent mógł bezpiecznie odczytać komunikat
             const serverMessage = err?.response?.data?.error || err?.response?.data?.message || err?.message;
             const error = new Error(serverMessage || 'Rejestracja nieudana');
             error.response = err.response;
@@ -22,7 +19,6 @@ const authService = {
         }
     },
 
-    // Logowanie - zwraca access_token i refresh_token
     login: async (credentials) => {
         try {
             const response = await api.post('/login', credentials);
@@ -39,7 +35,6 @@ const authService = {
         }
     },
 
-    // Odświeżanie tokena przy użyciu refresh_token z nagłówka
     refreshToken: async () => {
         const refreshToken = localStorage.getItem('refresh_token');
         const response = await api.post('/refresh', {}, {
@@ -51,7 +46,6 @@ const authService = {
         return response.data;
     },
 
-    // Wylogowanie - usuwa sesję lokalną i na serwerze
     logout: async () => {
         try {
             await api.post('/logout');

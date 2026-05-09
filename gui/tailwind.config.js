@@ -10,33 +10,29 @@ export default {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Główny motyw aplikacji (Fiolety - nowoczesność, technologia)
         brand: {
-          50: '#f5f3ff',  // bardzo jasny fiolet
+          50: '#f5f3ff',
           100: '#ede9fe',
           200: '#ddd6fe',
           500: '#8b5cf6',
-          600: '#7c3aed', // Główny kolor platformy
+          600: '#7c3aed',
           700: '#6d28d9',
           900: '#4c1d95',
         },
-        // Kolor Akcentów (Malinowy róż - przyciski Call To Action, grywalizacja)
         accent: {
           50: '#fff1f2',
           100: '#ffe4e6',
           500: '#f43f5e',
-          600: '#e11d48', // Główne akcenty i przyciski
+          600: '#e11d48',
           700: '#be123c',
         },
-        // Sukces i bezpieczeństwo (Neonowa/Jaskrawa zieleń - streaki, dobra kondycja)
         safe: {
           50: '#f0fdf4',
           100: '#dcfce7',
-          400: '#4ade80', // Jaskrawy zielony (np. dla 100% bezpieczeństwa)
+          400: '#4ade80',
           500: '#22c55e',
           600: '#16a34a',
         },
-        // Ostrzeżenia (Bursztynowy)
         warning: {
           50: '#fffbeb',
           100: '#fef3c7',
@@ -45,7 +41,6 @@ export default {
           500: '#f59e0b',
           600: '#d97706',
         },
-        // Zagrożenie / Błędy (Czerwień)
         danger: {
           50: '#fef2f2',
           100: '#fee2e2',

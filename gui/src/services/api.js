@@ -10,7 +10,6 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Obsługa błędu 401 (Unauthorized) i automatyczny refresh
 api.interceptors.response.use(
     (response) => response,
     async (error) => {

@@ -39,6 +39,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         ) : (
                             <>
                                 <Link to="/" className="hover:text-blue-600 transition">Mój Panel</Link>
+                                <Link to="/family" className="hover:text-blue-600 transition">Dla Rodziny</Link>
                                 <button
                                     onClick={handleLogout}
                                     className="text-red-600 font-bold hover:bg-red-50 px-4 py-2 rounded-lg transition"
