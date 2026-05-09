@@ -1,11 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Beaker, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
-        <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4">
-            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 relative overflow-hidden">
+            {/* decorative orbs */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-20">
+                <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-purple-300/20 blur-[120px]" />
+                <div className="absolute top-[20%] -right-[10%] w-[40%] h-[40%] rounded-full bg-fuchsia-300/20 blur-[120px]" />
+            </div>
+
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -21,9 +28,9 @@ const Hero = () => {
                         <button className="flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-xl shadow-purple-500/40">
                             Zainstaluj darmową wtyczkę <ChevronRight className="w-5 h-5" />
                         </button>
-                        <button className="flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 px-8 py-4 rounded-2xl text-lg font-bold hover:border-purple-400 hover:bg-purple-50 transition-all">
+                        <Link to="/login" className="flex items-center justify-center gap-2 bg-white/80 border-2 border-slate-200 text-slate-700 px-8 py-4 rounded-2xl text-lg font-bold hover:border-purple-400 hover:bg-purple-50 transition-all">
                             <Beaker className="w-5 h-5 text-purple-500" /> Zaloguj do Laboratorium
-                        </button>
+                        </Link>
                     </div>
                 </motion.div>
 
@@ -40,7 +47,7 @@ const Hero = () => {
                             <div className="w-3 h-3 rounded-full bg-emerald-400" />
                         </div>
                         <div className="p-8">
-                            <div className="flex items-start gap-4 p-6 bg-amber-50 border-2 border-amber-200 rounded-2xl animate-pulse">
+                            <div className="flex items-start gap-4 p-6 bg-white/80 backdrop-blur-xl border border-white/50 rounded-2xl shadow-2xl shadow-purple-900/10 animate-pulse relative z-10">
                                 <AlertTriangle className="w-12 h-12 text-amber-500 shrink-0" />
                                 <div>
                                     <h4 className="text-amber-800 font-bold text-lg">Podejrzany link!</h4>
