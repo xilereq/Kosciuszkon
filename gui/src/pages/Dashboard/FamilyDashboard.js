@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import { FamilyService } from '../../services';
 import {FamilyHeader, FamilyManagement, MemberList, FamilyStats, MemberReportModal} from '../../components'
 
@@ -8,19 +9,31 @@ const FamilyDashboard = () => {
     const [selectedMember, setSelectedMember] = useState(null);
     const [memberEvents, setMemberEvents] = useState([]);
     const [isModalLoading, setIsModalLoading] = useState(false);
+    const [isSupervisor, setIsSupervisor] = useState(null); // null oznacza ładowanie
 
     const loadFamilyData = async () => {
         try {
-            const data = await FamilyService.getFamily();
-            if (data) {
-                setFamily(data);
-                setStats({
-                    goals: data.goals_count || 0,
-                    messages: data.messages_count || 0,
-                    premium: !!data.premium
-                });
+            // Używamy ujednoliconej metody amIBoss z FamilyService
+            const res = await FamilyService.amIBoss();
+            const supervisorStatus = res.is_boss === true;
+            setIsSupervisor(supervisorStatus);
+
+            // Jeśli ma uprawnienia, pobieramy dane rodziny
+            if (supervisorStatus) {
+                const data = await FamilyService.getFamily();
+                if (data) {
+                    setFamily(data);
+                    setStats({
+                        goals: data.goals_count || 0,
+                        messages: data.messages_count || 0,
+                        premium: !!data.premium
+                    });
+                }
             }
-        } catch (err) { setFamily(null); }
+        } catch (err) {
+            setFamily(null);
+            setIsSupervisor(false);
+        }
     };
 
     useEffect(() => { loadFamilyData(); }, []);
@@ -38,6 +51,27 @@ const FamilyDashboard = () => {
             ]);
         } finally { setIsModalLoading(false); }
     };
+
+    // Ekran braku dostępu
+    if (isSupervisor === false) {
+        return (
+            <div className="min-h-screen bg-slate-50 pt-28 pb-8 px-4 flex items-center justify-center">
+                <div className="text-center bg-white p-8 rounded-3xl shadow-sm border border-red-100 max-w-md w-full">
+                    <h2 className="text-2xl font-bold text-red-600 mb-2">Brak dostępu</h2>
+                    <p className="text-slate-600">
+                        Tylko supervisor rodziny może zarządzać Parasolem Rodzinnym.
+                    </p>
+                    <a href="/" className="mt-6 inline-block bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-black transition-all">
+                        Wróć do Panelu
+                    </a>
+                </div>
+            </div>
+        );
+    }
+
+    if (isSupervisor === null) {
+        return <div className="min-h-screen bg-slate-50 flex justify-center items-center">Ładowanie...</div>;
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 pt-28 pb-8 px-4 md:px-8">

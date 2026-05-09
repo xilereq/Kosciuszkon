@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShieldCheck, ShieldAlert, Zap, Loader2, Info, Smartphone, Mail } from 'lucide-react';
+import { Search, ShieldCheck, ShieldAlert, AlertTriangle, Zap, Loader2, Info, Smartphone, Mail } from 'lucide-react';
 import { PredictService } from '../../../services';
 
 const AnalysisLab = () => {
@@ -18,14 +18,28 @@ const AnalysisLab = () => {
         try {
             const data = await PredictService.predict(type, input);
 
-            const isThreat = data.prediction === true || data.prediction === 'spam' || data.prediction === 'phishing';
+            // Pobieramy prawdopodobieństwo (obsługa formatu 0-1 lub 0-100)
+            const probValue = data.prediction.confidence;
+            const percentage = probValue <= 1 ? Math.round(probValue * 100) : Math.round(probValue);
+            const explanation = data.prediction.explanation || "Brak dodatkowych informacji.";
+
+            // Logika wykrywania statusu na podstawie procentów
+            let status = 'safe';
+            let title = 'TREŚĆ WYDAJE SIĘ BEZPIECZNA';
+
+            if (percentage >= 80) {
+                status = 'danger';
+                title = 'WYKRYTO ZAGROŻENIE!';
+            } else if (percentage >= 50) {
+                status = 'warning';
+                title = 'OSTRZEŻENIE - PODEJRZANA TREŚĆ';
+            }
 
             setResult({
-                status: isThreat ? 'danger' : 'safe',
-                title: isThreat ? 'WYKRYTO ZAGROŻENIE!' : 'TREŚĆ WYDAJE SIĘ BEZPIECZNA',
-                description: isThreat
-                    ? `Nasz model AI wykrył wzorce typowe dla ${type.toUpperCase()}. Nie klikaj w linki i nie podawaj danych.`
-                    : `SafeGuard AI nie znalazł w tym ${type === 'sms' ? 'SMS-ie' : 'e-mailu'} cech oszustwa.`
+                status,
+                probability: percentage,
+                title,
+                description: explanation,
             });
         } catch (err) {
             setResult({
@@ -35,6 +49,39 @@ const AnalysisLab = () => {
             });
         } finally {
             setIsScanning(false);
+        }
+    };
+
+    // Funkcje pomocnicze do stylizacji w zależności od statusu
+    const getContainerStyles = (status) => {
+        switch (status) {
+            case 'danger': return 'bg-red-50 border-red-200 text-red-900';
+            case 'warning': return 'bg-amber-50 border-amber-200 text-amber-900';
+            default: return 'bg-emerald-50 border-emerald-200 text-emerald-900'; // safe
+        }
+    };
+
+    const getIconStyles = (status) => {
+        switch (status) {
+            case 'danger': return 'bg-red-100 text-red-600';
+            case 'warning': return 'bg-amber-100 text-amber-600';
+            default: return 'bg-emerald-100 text-emerald-600'; // safe
+        }
+    };
+
+    const getProgressBarStyles = (status) => {
+        switch (status) {
+            case 'danger': return 'bg-red-500';
+            case 'warning': return 'bg-amber-500';
+            default: return 'bg-emerald-500'; // safe
+        }
+    };
+
+    const renderIcon = (status) => {
+        switch (status) {
+            case 'danger': return <ShieldAlert size={32} />;
+            case 'warning': return <AlertTriangle size={32} />;
+            default: return <ShieldCheck size={32} />; // safe
         }
     };
 
@@ -92,18 +139,37 @@ const AnalysisLab = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`mt-8 p-6 rounded-2xl border-2 flex items-start gap-5 ${
-                            result.status === 'danger' ? 'bg-red-50 border-red-200 text-red-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                        }`}
+                        className={`mt-8 p-6 rounded-2xl border-2 flex flex-col gap-4 ${getContainerStyles(result.status)}`}
                     >
-                        <div className={`p-3 rounded-xl shrink-0 ${result.status === 'danger' ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                            {result.status === 'danger' ? <ShieldAlert size={32} /> : <ShieldCheck size={32} />}
-                        </div>
-                        <div>
-                            <h3 className="font-black text-xl mb-1">{result.title}</h3>
-                            <p className="font-medium opacity-80 text-sm md:text-base">{result.description}</p>
-                            <div className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-60">
-                                <Info size={14} /> Wynik z Twojego modelu Flask AI
+                        <div className="flex items-start gap-5">
+                            <div className={`p-3 rounded-xl shrink-0 ${getIconStyles(result.status)}`}>
+                                {renderIcon(result.status)}
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-black text-xl mb-1">{result.title}</h3>
+                                <p className="font-medium opacity-80 text-sm md:text-base">{result.description}</p>
+
+                                {/* Sekcja Procentowa */}
+                                {result.probability !== undefined && (
+                                    <div className="mt-4">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-xs font-bold uppercase tracking-tighter">Prawdopodobieństwo AI:</span>
+                                            <span className="text-sm font-black">{result.probability}%</span>
+                                        </div>
+                                        <div className="w-full bg-slate-200/50 rounded-full h-2 overflow-hidden">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${result.probability}%` }}
+                                                transition={{ duration: 1, ease: "easeOut" }}
+                                                className={`h-full ${getProgressBarStyles(result.status)}`}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-60">
+                                    <Info size={14} /> Wynik z Twojego modelu Flask AI
+                                </div>
                             </div>
                         </div>
                     </motion.div>

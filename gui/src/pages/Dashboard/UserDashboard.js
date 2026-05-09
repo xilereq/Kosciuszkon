@@ -1,25 +1,34 @@
+// src/pages/Dashboard/UserDashboard.js
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { FamilyService } from '../../services/';
 import {SecurityHeader, FamilySidebar, AnalysisLab, ActiveShield, AwarenessTrainingCard} from '../../components';
 
-
 const UserDashboard = () => {
     const [events, setEvents] = useState([]);
     const [family, setFamily] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isSupervisor, setIsSupervisor] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [userRes, familyRes] = await Promise.all([
-                    api.get('/user/dashboard'),
-                    FamilyService.getFamily()
-                ]);
+                const userRes = await api.get('/user/dashboard');
                 setEvents(userRes.data.recentEvents || []);
-                setFamily(familyRes);
-            } catch { console.error("Błąd ładowania"); }
-            finally { setLoading(false); }
+
+                const bossData = await FamilyService.amIBoss();
+                const supervisorStatus = bossData.is_boss === true;
+                setIsSupervisor(supervisorStatus);
+
+                if (supervisorStatus) {
+                    const familyRes = await FamilyService.getFamily();
+                    setFamily(familyRes);
+                }
+            } catch (error) {
+                console.error("Błąd ładowania danych panelu użytkownika:", error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchData();
     }, []);
@@ -30,7 +39,9 @@ const UserDashboard = () => {
                 <SecurityHeader />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <aside className="lg:col-span-1 space-y-8">
-                        <FamilySidebar family={family} loading={loading} />
+                        {isSupervisor && (
+                            <FamilySidebar family={family} loading={loading} />
+                        )}
                         <AwarenessTrainingCard />
                     </aside>
                     <main className="lg:col-span-2 space-y-8">
