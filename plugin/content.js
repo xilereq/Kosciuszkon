@@ -38,25 +38,31 @@ function applyWarningStyles(domElement, aiExplanation) {
 }
 
 
-function extractMetadataAndScan(element, text) {
+function extractMetadataAndScan(mailBodyElement, rawText, activeContainer) {
   let payload = {
-    text: text,
+    text: rawText.trim(),
     source_type: "email",
     sender: null,
     title: null
   };
 
-  const titleElem = document.querySelector("h2.hP");
-  if (titleElem) payload.title = titleElem.innerText;
+  const titleElem = document.querySelector("h2[data-thread-perm-id], h2.hP");
+  if (titleElem) {
+    payload.title = titleElem.innerText.trim();
+  }
 
-  const senderElem = element.closest("div.adn")?.querySelector("span.gD");
-  if (senderElem) payload.sender = senderElem.innerText + " (" + senderElem.getAttribute("email") + ")";
+  const senderObj = activeContainer.querySelector("span[email]");
+  if (senderObj) {
+    const name = senderObj.getAttribute("name") || senderObj.innerText;
+    const emailAddr = senderObj.getAttribute("email");
+    payload.sender = name + " (" + emailAddr + ")";
+  }
 
   verifyContentWithBackend(payload).then(apiResult => {
     if (apiResult) {
       alert("Wykryto link w mailu!\nWynik z serwera: " + apiResult.message);
       if (apiResult.status === "DANGER") {
-        applyWarningStyles(element, apiResult.message);
+        applyWarningStyles(mailBodyElement, apiResult.message);
       }
     }
   }).catch(error => console.error(error));
@@ -78,15 +84,20 @@ function findAndAnalyzeMessages() {
     return;
   }
 
-  const textContainers = document.querySelectorAll("p, span, div[dir='auto']");
-  
-  for (let element of textContainers) {
-    const text = element.innerText;
-    
+  const activeMailContainer = document.querySelector("[role='main']");
+  if (!activeMailContainer) {
+    return;
+  }
+
+  const mailBodies = activeMailContainer.querySelectorAll("div.a3s, div[dir='ltr']");
+
+  for (let bodyElement of mailBodies) {
+    const text = bodyElement.innerText;
+
     if (text && text.length > 15 && !checkedTexts.has(text)) {
       if (text.includes("http") || text.includes("www")) {
         checkedTexts.add(text);
-        extractMetadataAndScan(element, text);
+        extractMetadataAndScan(bodyElement, text, activeMailContainer);
       }
     }
   }
