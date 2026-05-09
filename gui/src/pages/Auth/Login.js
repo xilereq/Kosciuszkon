@@ -5,10 +5,9 @@ import SubmitButton from '../../components/auth/SubmitButton.js';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthService } from '../../services';
 
-const emailRegex = /^\S+@\S+\.\S+$/;
 
-const Login = () => {
-    const [form, setForm] = useState({ email: '', password: '' });
+const Login = ({onLoginSuccess}) => {
+    const [form, setForm] = useState({ username: '', password: '' });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -21,8 +20,7 @@ const Login = () => {
 
     const validate = () => {
         const errs = {};
-        if (!form.email) errs.email = 'Email jest wymagany';
-        else if (!emailRegex.test(form.email)) errs.email = 'Nieprawidłowy adres email';
+        if (!form.username) errs.username = 'Nazwa użytkownika jest wymagana';
         if (!form.password) errs.password = 'Hasło jest wymagane';
         return errs;
     };
@@ -36,17 +34,25 @@ const Login = () => {
         }
         setLoading(true);
         try {
-            // Wywołanie centralnego serwisu
             await AuthService.login({
-                email: form.email,
+                username: form.username,
                 password: form.password
             });
+            onLoginSuccess();
             navigate('/');
         } catch (err) {
-            // Obsługa błędów z API Flaska
-            setErrors({
-                general: err.response?.data?.error || 'Błędny login lub hasło'
-            });
+            const apiError = err.response?.data?.error;
+            let errorMessage = 'Wystąpił nieoczekiwany błąd';
+
+            if (Array.isArray(apiError)) {
+                errorMessage = apiError[0]?.msg || apiError[0] || errorMessage;
+            } else if (typeof apiError === 'string') {
+                errorMessage = apiError;
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            setErrors({ general: errorMessage });
         } finally {
             setLoading(false);
         }
@@ -60,7 +66,7 @@ const Login = () => {
                         {errors.general}
                     </p>
                 )}
-                <FormInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />
+                <FormInput label="Nazwa użytkownika" name="username" type="text" value={form.username} onChange={handleChange} error={errors.username} />
                 <FormInput label="Hasło" name="password" type="password" value={form.password} onChange={handleChange} error={errors.password} />
                 <div className="pt-2">
                     <SubmitButton label="Zaloguj" loading={loading} disabled={loading} />
