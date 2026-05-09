@@ -6,7 +6,6 @@ export {default as Navbar} from './layout/Navbar'
 
 export {default as Hero} from './sections/MainDashboard/Hero'
 export {default as Features} from './sections/MainDashboard/Features'
-export {default as Gamification} from './sections/MainDashboard/Gamification'
 export {default as FamilyUmbrella} from './sections/MainDashboard/FamilyUmbrella'
 export {default as Partners} from './sections/MainDashboard/Partners'
 
