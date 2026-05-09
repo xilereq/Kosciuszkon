@@ -39,7 +39,6 @@ const Register = () => {
         }
         setLoading(true);
         try {
-            // Rejestracja przez serwis z mapowaniem pól na format API
             await AuthService.register({
                 name: form.name,
                 email: form.email,
@@ -47,7 +46,6 @@ const Register = () => {
             });
             navigate('/login');
         } catch (err) {
-            // Obsługa błędów walidacji z Flaska
             setErrors({
                 general: err.response?.data?.error || 'Rejestracja nieudana. Użytkownik może już istnieć.'
             });

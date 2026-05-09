@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Footer, Navbar } from './components';
-import { Hero, Features, Gamification, FamilyUmbrella, Partners } from './components';
 import { Login, Register } from './pages';
-import { FamilyDashboard } from "./pages";
+import { FamilyDashboard, Dashboard } from "./pages";
 import UserDashboard from './pages/Dashboard/UserDashboard';
 
 function App() {
@@ -21,13 +20,7 @@ function App() {
                     isAuthenticated ? (
                         <UserDashboard />
                     ) : (
-                        <>
-                            <Hero />
-                            <Features />
-                            <Gamification />
-                            <FamilyUmbrella />
-                            <Partners />
-                        </>
+                        <Dashboard/>
                     )
                 } />
                 <Route path="/login" element={
