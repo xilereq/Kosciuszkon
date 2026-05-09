@@ -3,6 +3,15 @@ import { motion } from 'framer-motion';
 import { ChevronRight, Beaker, AlertTriangle } from 'lucide-react';
 
 const Hero = () => {
+const handleInstallClick = () => {
+        alert(
+            "Instalacja wersji deweloperskiej (Hackathon MVP):\n\n" +
+            "1. Otwórz nową kartę i wpisz adres: chrome://extensions\n" +
+            "2. Włącz 'Tryb dewelopera' w prawym górnym rogu.\n" +
+            "3. Kliknij 'Załaduj rozpakowane' i wybierz folder 'plugin' z naszego projektu."
+        );
+    };
+
     return (
         <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
@@ -18,9 +27,14 @@ const Hero = () => {
                         Kompleksowa ochrona przed phishingiem, prosta edukacja i cyfrowy parasol nad Twoimi bliskimi.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-200">
+                        {/* === ZMODYFIKOWANY PRZYCISK === */}
+                        <button
+                            onClick={handleInstallClick}
+                            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-2xl text-lg font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl shadow-blue-200"
+                        >
                             Zainstaluj darmową wtyczkę <ChevronRight className="w-5 h-5" />
                         </button>
+
                         <button className="flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-700 px-8 py-4 rounded-2xl text-lg font-bold hover:border-blue-400 transition-all">
                             <Beaker className="w-5 h-5 text-blue-500" /> Zaloguj do Laboratorium
                         </button>

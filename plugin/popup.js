@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const loginBtn = document.getElementById("login-btn");
+  const logoutBtn = document.getElementById("logout-btn");
   const statusDiv = document.getElementById("status");
 
   chrome.storage.local.get(["access_token"], (result) => {
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chrome.storage.local.set({ access_token: data.access_token }, () => {
           document.getElementById("login-section").style.display = "none";
           document.getElementById("logged-section").style.display = "block";
+          statusDiv.innerText = "";
         });
       } else {
         statusDiv.innerText = "Błędne dane logowania";
@@ -33,5 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       statusDiv.innerText = "Błąd połączenia z serwerem";
     }
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    chrome.storage.local.remove(["access_token"], () => {
+      document.getElementById("logged-section").style.display = "none";
+      document.getElementById("login-section").style.display = "block";
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    });
   });
 });
