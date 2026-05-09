@@ -23,6 +23,16 @@ const FamilyService = {
     getMemberEvents: async (memberId) => {
         const response = await api.get(`/family/member/${memberId}/events`);
         return response.data;
+    },
+
+    amIBoss: async () => {
+        try {
+            const response = await api.get('/family/am_i_boss');
+            return response.data;
+        } catch (err) {
+            console.error("Błąd podczas sprawdzania uprawnień szefa rodziny:", err);
+            throw err;
+        }
     }
 };
 
