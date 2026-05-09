@@ -13,9 +13,6 @@ const UserDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userRes = await api.get('/user/dashboard');
-                setEvents(userRes.data.recentEvents || []);
-
                 const bossData = await FamilyService.amIBoss();
                 const supervisorStatus = bossData.is_boss === true;
                 setIsSupervisor(supervisorStatus);
