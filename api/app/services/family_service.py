@@ -2,7 +2,7 @@ from flask import abort
 
 from app.db import session
 from app.models import Family, UserFamily
-
+from app.schemas import FamilyJoinRequest
 
 def add_new_family(family_name, owner_id):
     db = session()
@@ -27,11 +27,12 @@ def add_new_family(family_name, owner_id):
         db.close()
 
 
-def join_family_by_name(family_name, user_id, is_admin):
+def join_family_by_name(user_id, request_data: FamilyJoinRequest):
     db = session()
     try:
         family = db.query(Family).filter(
-            Family.family_name == family_name).first()
+            Family.family_name == request_data.family_name
+        ).first()
 
         if not family:
             abort(404, description="Nie znaleziono rodziny!")
@@ -47,8 +48,9 @@ def join_family_by_name(family_name, user_id, is_admin):
         new_member = UserFamily(
             user_id=user_id,
             family_id=family.id,
-            is_admin=is_admin,
-            notifications_enabled=is_admin
+            is_admin=request_data.is_admin,
+            notifications_enabled=request_data.is_admin,
+            name=request_data.name
         )
 
         db.add(new_member)

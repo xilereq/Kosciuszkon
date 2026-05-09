@@ -37,11 +37,7 @@ def join_existing_family():
     except ValidationError as e:
         abort(400, description=e.errors())
     current_user_id = get_jwt_identity()
-    result = join_family_by_name(
-        family_name=req_data.family_name,
-        user_id=current_user_id,
-        is_admin=req_data.is_admin
-    )
+    result = join_family_by_name(current_user_id, req_data)
 
     if result is None:
         abort(500, description="Błąd podczas dołączania do rodziny.")

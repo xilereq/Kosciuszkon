@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer
+
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 
 from app.db import Base
 
@@ -11,4 +12,4 @@ class UserFamily(Base):
 
     is_admin = Column(Boolean, default=False)
     notifications_enabled = Column(Boolean, default=True)
-    
+    name = Column(String(50), nullable=False)

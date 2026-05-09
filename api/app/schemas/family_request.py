@@ -8,3 +8,4 @@ class FamilyCreateRequest(BaseModel):
 class FamilyJoinRequest(BaseModel):
     family_name: str
     is_admin: bool = False
+    name: str
