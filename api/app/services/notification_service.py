@@ -16,6 +16,7 @@ def add_notification_to_db(req_data: NotificationCreateRequest,
             abort(404, "Użytkownik nie należy do rodziny")
 
         new_notification = Notification(
+            user_id=user_id,
             family_id=user_family_record.family_id,
             title=req_data.title,
             sender=req_data.sender,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AuthLayout from './AuthLayout.js';
 import FormInput from '../../components/auth/FormInput.js';
 import SubmitButton from '../../components/auth/SubmitButton.js';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { AuthService } from '../../services';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
@@ -70,6 +70,11 @@ const Register = () => {
                     <SubmitButton label="Utwórz konto" loading={loading} disabled={loading} />
                 </div>
             </form>
+            <div className="mt-6 text-center text-sm text-slate-500">
+                <p>
+                    Masz już konto? <Link to="/login" className="text-purple-600 hover:underline">Zaloguj się</Link>
+                </p>
+            </div>
         </AuthLayout>
     );
 };

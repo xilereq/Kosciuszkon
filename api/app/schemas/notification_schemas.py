@@ -7,7 +7,7 @@ from .notification_type import NotificationType
 class NotificationCreateRequest(BaseModel):
     title: str = Field(..., min_length=1, max_length=2000)
     sender: str = Field(..., min_length=1, max_length=500)
-    probability: float = Field(..., ge=0.0, le=1.0)
+    probability: float = Field(..., ge=0.0, le=100.0)
     content: Optional[str] = Field(None, max_length=5000)
     created_at: datetime
     type: NotificationType

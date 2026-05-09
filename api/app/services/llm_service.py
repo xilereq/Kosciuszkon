@@ -1,8 +1,8 @@
 import logging
 import os
 
-import google.generativeai as genai
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from google import genai
+from google.genai import types
 from groq import Groq
 
 logger = logging.getLogger(__name__)
@@ -18,18 +18,17 @@ def get_groq_client():
         logger.error(f"Nie udało się zainicjalizować klienta Groq: {e}")
         return None
 
-def configure_gemini():
+def get_gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         logger.error("Błąd: Zmienna GEMINI_API_KEY jest pusta lub nie została załadowana z .env!")
-        return False
+        return None
 
     try:
-        genai.configure(api_key = api_key)
-        return True
+        return genai.Client(api_key = api_key)
     except Exception as e:
         logger.error(f"Nie udało się skonfigurować API Gemini: {e}")
-        return False
+        return None
 
 def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> str:
     client = get_groq_client()
@@ -78,7 +77,8 @@ def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> st
 
 
 def generate_training_explanation(text: str, true_label: str, user_guess: str, msg_type: str = "wiadomość") -> str:
-    if not configure_gemini():
+    client = get_gemini_client()
+    if not client:
         return "System edukacyjny jest obecnie niedostępny."
 
     if true_label == 'spam' and user_guess == 'safe':
@@ -95,26 +95,17 @@ def generate_training_explanation(text: str, true_label: str, user_guess: str, m
         )
 
     try:
-        model = genai.GenerativeModel(
-            model_name="gemini-2.5-flash",
-            system_instruction=(
-                "Jesteś trenerem cyberbezpieczeństwa. Uczysz użytkowników przez wskazywanie błędów. "
-                "Pisz zwięźle i przystępnie."
-            )
-        )
-
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=(
+                    "Jesteś trenerem cyberbezpieczeństwa. Uczysz użytkowników przez wskazywanie błędów. "
+                    "Pisz zwięźle i przystępnie."
+                ),
                 temperature=0.3,
-                max_output_tokens=5000,
-            ),
-            safety_settings = {
-                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-            }
+                max_output_tokens=5000
+            )
         )
 
         return response.text.strip()
