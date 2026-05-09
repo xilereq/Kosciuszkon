@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -15,3 +17,16 @@ class AddFamilyMemberResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class FamilyMemberResponse(BaseModel):
+    name: str
+    is_admin: bool
+
+    class Config:
+        from_attributes = True
+
+
+class FamilyDashboardResponse(BaseModel):
+    family_name: str
+    members: List[FamilyMemberResponse]

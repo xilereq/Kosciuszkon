@@ -2,10 +2,10 @@ from flask import abort, Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from pydantic import ValidationError
 
-from app.schemas import (AddFamilyMemberResponse, FamilyCreateRequest,
-                         FamilyCreateResponse, FamilyJoinRequest)
+from app.schemas import AddFamilyMemberResponse, FamilyCreateRequest, \
+    FamilyCreateResponse, FamilyDashboardResponse, FamilyJoinRequest
 from app.services.family_service import add_new_family, \
-    join_family_by_name
+    get_family_members, join_family_by_name
 
 family_bp = Blueprint('family', __name__, url_prefix='/api/family')
 
@@ -20,13 +20,15 @@ def create_new_family():
         abort(400, description=e.errors())
     current_user_id = get_jwt_identity()
     result = add_new_family(
-        family_name=req_data.family_name,
-        owner_id=current_user_id
+        owner_id=current_user_id,
+        request_data=req_data
     )
     if result is None:
-        abort(409, description="Rodzina o tej nazwie już istnieje.")
-    return jsonify(FamilyCreateResponse.
-                   model_validate(result).model_dump()), 201
+        abort(409,
+              description="Nie udało się utworzyć rodziny. "
+                          "Nazwa może być zajęta.")
+    return jsonify(
+        FamilyCreateResponse.model_validate(result).model_dump()), 201
 
 
 @family_bp.route('/join', methods=['POST'])
@@ -43,4 +45,19 @@ def join_existing_family():
         abort(500, description="Błąd podczas dołączania do rodziny.")
 
     return jsonify(AddFamilyMemberResponse.model_validate(
+        result).model_dump()), 200
+
+
+@family_bp.route('/members', methods=['GET'])
+@jwt_required()
+def list_family_members():
+    current_user_id = get_jwt_identity()
+
+    result = get_family_members(current_user_id)
+
+    if result is None:
+        abort(404,
+              description="Użytkownik nie należy do żadnej rodziny.")
+
+    return jsonify(FamilyDashboardResponse.model_validate(
         result).model_dump()), 200
