@@ -1,55 +1,62 @@
 from flask import Blueprint, request, jsonify
+from pydantic import ValidationError
 
+from app.services.translation_service import detect_language, translate_to_english
 from app.services.predict_service import get_prediction
 from app.services.llm_service import generate_spam_explanation
+from app.schemas.predict_schema import PredictRequest, PredictResponse, PredictionDetails
 
-predict_bp = Blueprint('predict', __name__, url_prefix='/api/v1/predict')
+predict_bp = Blueprint('predict', __name__, url_prefix='/api/predict')
 
-@predict_bp.route('/sms', methods=['POST'])
-def predict_sms():
-    data = request.get_json()
-    if not data or 'text' not in data:
-        return jsonify({"error": "Brak pola 'text'"}), 400
+
+def _process_prediction(msg_type: str):
+    json_data = request.get_json() or {}
 
     try:
-        text = data['text']
-        result = get_prediction('sms', text)
+        req = PredictRequest(**json_data)
+    except ValidationError as e:
+        return jsonify({"error": "Błąd walidacji danych wejściowych", "details": e.errors()}), 400
+
+    try:
+        original_text = req.text
+
+        detected_language = detect_language(original_text)
+        if detected_language not in ('en', 'unknown'):
+            text_for_ml = translate_to_english(original_text)
+        else:
+            text_for_ml = original_text
+
+        result = get_prediction(msg_type, text_for_ml)
 
         if result.get('is_spam') is True:
             explanation = generate_spam_explanation(
-                text,
-                msg_type = 'sms',
-                confidence = result.get('confidence')
+                text=original_text,
+                msg_type=msg_type,
+                confidence=result.get('confidence')
             )
-            result['explanation'] = explanation
         else:
-            result['explanation'] = None
+            explanation = None
 
-        return jsonify({"type": "sms", "prediction": result}), 200
+        response_obj = PredictResponse(
+            type=msg_type,
+            prediction=PredictionDetails(
+                is_spam=result.get('is_spam'),
+                confidence=result.get('confidence'),
+                explanation=explanation
+            )
+        )
+
+        return jsonify(response_obj.model_dump()), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@predict_bp.route('/sms', methods=['POST'])
+def predict_sms():
+    return _process_prediction('sms')
 
 
 @predict_bp.route('/email', methods=['POST'])
 def predict_email():
-    data = request.get_json()
-    if not data or 'text' not in data:
-        return jsonify({"error": "Brak pola 'text'"}), 400
-
-    try:
-        text = data['text']
-        result = get_prediction('email', text)
-
-        if result.get('is_spam') is True:
-            explanation = generate_spam_explanation(
-                text,
-                msg_type = 'email',
-                confidence = result.get('confidence')
-            )
-            result['explanation'] = explanation
-        else:
-            result['explanation'] = None
-
-        return jsonify({"type": "email", "prediction": result}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return _process_prediction('email')

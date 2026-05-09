@@ -7,11 +7,9 @@ logger = logging.getLogger(__name__)
 
 def get_groq_client():
     api_key = os.getenv("GROQ_API_KEY")
-
     if not api_key:
         logger.error("Błąd: Zmienna GROQ_API_KEY jest pusta lub nie została załadowana z .env!")
         return None
-
     try:
         return Groq(api_key=api_key)
     except Exception as e:

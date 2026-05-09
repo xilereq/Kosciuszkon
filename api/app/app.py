@@ -36,7 +36,7 @@ def create_app():
     register_error_handlers(app)
 
     with app.app_context():
-        from app.models import Family, User, UserFamily # noqa
+        from app.models import Family, Notification, User, UserFamily # noqa
         Base.metadata.create_all(bind=engine)
         load_models()
 
