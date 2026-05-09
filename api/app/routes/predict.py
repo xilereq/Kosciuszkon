@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 from app.services.predict_service import get_prediction
 from app.services.llm_service import generate_spam_explanation
 
-predict_bp = Blueprint('predict', __name__, url_prefix='/api/v1/predict')
+predict_bp = Blueprint('predict', __name__, url_prefix='/api/predict')
 
 @predict_bp.route('/sms', methods=['POST'])
 def predict_sms():
