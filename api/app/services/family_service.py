@@ -2,7 +2,7 @@ from flask import abort
 from sqlalchemy import and_
 
 from app.db import session
-from app.models import Family, UserFamily
+from app.models import Family, User, UserFamily
 from app.schemas import FamilyCreateRequest, FamilyJoinRequest
 
 
@@ -105,5 +105,21 @@ def get_family_members(user_id):
     except Exception as ex:
         print(f"Błąd: {ex}")
         return None
+    finally:
+        db.close()
+
+
+def is_family_admin(user_id):
+    db = session()
+    try:
+        admin_record = db.query(UserFamily).filter(
+            UserFamily.user_id == user_id,
+            UserFamily.is_admin == True # noqa
+        ).first()
+        print(admin_record)
+        return admin_record is not None
+    except Exception as ex:
+        print(f"Błąd is_family_admin: {ex}")
+        return False
     finally:
         db.close()

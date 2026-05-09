@@ -4,8 +4,8 @@ from pydantic import ValidationError
 
 from app.schemas import AddFamilyMemberResponse, FamilyCreateRequest, \
     FamilyCreateResponse, FamilyDashboardResponse, FamilyJoinRequest
-from app.services.family_service import add_new_family, \
-    get_family_members, join_family_by_name
+from app.services import add_new_family, get_family_members, \
+    is_family_admin, join_family_by_name
 
 family_bp = Blueprint('family', __name__, url_prefix='/api/family')
 
@@ -61,3 +61,13 @@ def list_family_members():
 
     return jsonify(FamilyDashboardResponse.model_validate(
         result).model_dump()), 200
+
+
+@family_bp.route('/am_i_boss', methods=['GET'])
+@jwt_required()
+def am_i_boss():
+    current_user_id = get_jwt_identity()
+    is_boss = is_family_admin(current_user_id)
+    return jsonify({
+        'is_boss': is_boss,
+    }), 200
