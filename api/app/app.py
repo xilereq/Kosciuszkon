@@ -3,8 +3,8 @@ from datetime import timedelta
 
 from dotenv import load_dotenv
 from flask import Flask
-from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 from app.db import Base, engine
 
@@ -35,7 +35,7 @@ def create_app():
     register_error_handlers(app)
 
     with app.app_context():
-        from app.models import User # noqa
+        from app.models import Family, User, UserFamily # noqa
         Base.metadata.create_all(bind=engine)
 
     return app
