@@ -1,11 +1,10 @@
 // src/pages/Dashboard/UserDashboard.js
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
 import { FamilyService } from '../../services/';
 import {SecurityHeader, FamilySidebar, AnalysisLab, ActiveShield, AwarenessTrainingCard} from '../../components';
 
 const UserDashboard = () => {
-    const [events, setEvents] = useState([]);
+    const events = [];
     const [family, setFamily] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSupervisor, setIsSupervisor] = useState(false);
@@ -31,7 +30,7 @@ const UserDashboard = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 px-4">
+        <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-50 via-slate-50 to-white pt-28 pb-20 px-4">
             <div className="max-w-7xl mx-auto space-y-10">
                 <SecurityHeader />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

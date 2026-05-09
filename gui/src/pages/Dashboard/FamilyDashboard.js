@@ -54,7 +54,7 @@ const FamilyDashboard = () => {
     if (isSupervisor === null) return <div className="min-h-screen bg-slate-50 flex justify-center items-center font-bold">Ładowanie...</div>;
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-28 pb-8 px-4 md:px-8">
+        <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-50 via-slate-50 to-white pt-28 pb-8 px-4 md:px-8">
             <div className="max-w-6xl mx-auto">
                 <FamilyHeader />
 
@@ -104,3 +104,4 @@ const FamilyDashboard = () => {
 };
 
 export default FamilyDashboard;
+

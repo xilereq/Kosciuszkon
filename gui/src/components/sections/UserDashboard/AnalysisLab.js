@@ -86,7 +86,7 @@ const AnalysisLab = () => {
     };
 
     return (
-        <div className="glass-card p-8 rounded-[32px] mb-8 relative overflow-hidden border border-white/40 shadow-xl">
+        <div className="p-8 rounded-[32px] mb-8 relative overflow-hidden bg-white/80 backdrop-blur-xl border border-white/50 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-100 rounded-xl text-purple-600">
@@ -119,7 +119,7 @@ const AnalysisLab = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={`Wklej tutaj treść ${type === 'sms' ? 'SMS-a' : 'e-maila'} do sprawdzenia...`}
-                    className="w-full h-36 p-6 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 outline-none transition-all resize-none text-slate-700 font-medium"
+                    className="w-full h-36 p-6 bg-slate-50/50 border-2 border-dashed border-purple-200 focus:border-solid focus:border-purple-500 rounded-2xl shadow-inner outline-none transition-all resize-none text-slate-700 font-medium"
                 />
 
                 <div className="absolute bottom-4 right-4 flex gap-3">
