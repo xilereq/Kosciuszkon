@@ -1,0 +1,1 @@
+from .web_error_handler import register_error_handlers
