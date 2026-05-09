@@ -1,6 +1,7 @@
 import logging
-from langdetect import detect, DetectorFactory
+
 from deep_translator import GoogleTranslator
+from langdetect import detect, DetectorFactory
 
 logger = logging.getLogger(__name__)
 

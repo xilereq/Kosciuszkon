@@ -13,6 +13,15 @@ def register_error_handlers(app):
             'status': HTTPStatus.BAD_REQUEST.value
         }), HTTPStatus.BAD_REQUEST
 
+    @app.errorhandler(HTTPStatus.FORBIDDEN)
+    def forbidden(e):
+        print(f"Error 403: {e}")
+        return jsonify({
+            "error": "forbidden",
+            "message": getattr(e, 'description', str(e)),
+            "status": HTTPStatus.FORBIDDEN.value
+        }), HTTPStatus.FORBIDDEN
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def not_found(e):
         print(f"Error 404: {e}")
