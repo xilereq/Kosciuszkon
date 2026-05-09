@@ -1,146 +1,186 @@
-import React from 'react';
-import {
-    ShieldCheck,
-    AlertTriangle,
-    CheckCircle2,
-    Smartphone,
-    Users,
-    Gamepad2,
-    Siren,
-    Bell
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, UserPlus, Shield, Settings, MessageSquare, Target } from 'lucide-react';
+import  { FamilyService } from '../../services';
 
 const FamilyDashboard = () => {
-    return (
-        <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 px-4 font-sans text-slate-800">
-            <div className="max-w-7xl mx-auto space-y-10">
+    const [familyName, setFamilyName] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState({ type: '', message: '' });
+    const [family, setFamily] = useState(null);
+    const [stats, setStats] = useState({ goals: 0, messages: 0, premium: false });
 
-                {/* NAGŁÓWEK ZMIENIONY NA PARASOL RODZINNY */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+    useEffect(() => {
+        let mounted = true;
+        const load = async () => {
+            try {
+                const data = await FamilyService.getFamily();
+                if (!mounted) return;
+                if (data) {
+                    setFamily(data);
+                    setStats({
+                        goals: data.goals_count || 0,
+                        messages: data.messages_count || 0,
+                        premium: !!data.premium
+                    });
+                } else {
+                    setFamily(null);
+                }
+            } catch (err) {
+                setFamily(null);
+            }
+        };
+        load();
+        return () => { mounted = false; };
+    }, []);
+
+    const handleCreateFamily = async (e) => {
+        e.preventDefault();
+        if (!familyName) return;
+
+        setLoading(true);
+        setStatus({ type: '', message: '' });
+
+        try {
+            await FamilyService.createFamily(familyName);
+            setStatus({ type: 'success', message: `Rodzina "${familyName}" została utworzona!` });
+            setFamilyName('');
+            const data = await FamilyService.getFamily();
+            setFamily(data);
+        } catch (err) {
+            const errorMsg = err.response?.data?.description || 'Błąd podczas tworzenia rodziny';
+            setStatus({ type: 'error', message: typeof errorMsg === 'string' ? errorMsg : 'Błąd walidacji' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleJoinFamily = async (e) => {
+        e.preventDefault();
+        if (!familyName) return;
+
+        setLoading(true);
+        setStatus({ type: '', message: '' });
+
+        try {
+            await FamilyService.joinFamily(familyName);
+            setStatus({ type: 'success', message: `Dołączono do rodziny "${familyName}"!` });
+            setFamilyName('');
+            const data = await FamilyService.getFamily();
+            setFamily(data);
+        } catch (err) {
+            const errorMsg = err.response?.data?.description || 'Błąd podczas dołączania do rodziny';
+            setStatus({ type: 'error', message: typeof errorMsg === 'string' ? errorMsg : 'Nie znaleziono rodziny' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-slate-50 pt-28 pb-8 px-4 md:px-8">
+            <div className="max-w-6xl mx-auto">
+                {/* Header */}
+                <header className="flex justify-between items-center mb-10">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-slate-900 mb-2">
-                            Cyfrowy Parasol Rodzinny
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+                            Family<span className="text-blue-600">Umbrella</span>
                         </h1>
-                        <p className="text-slate-500">
-                            Zarządzaj bezpieczeństwem bliskich i reaguj na zagrożenia w czasie rzeczywistym.
-                        </p>
+                        <p className="text-slate-500 font-medium">Panel zarządzania grupą</p>
                     </div>
-                    <button className="flex items-center gap-2 bg-red-50 text-red-600 px-6 py-3 rounded-2xl font-bold border border-red-200 hover:bg-red-600 hover:text-white transition-all">
-                        <Siren className="w-5 h-5" /> Przycisk Paniki
-                    </button>
+                    <div className="flex gap-3">
+                        <button className="p-2.5 bg-white rounded-2xl shadow-sm border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
+                            <Settings size={20} />
+                        </button>
+                        <div className="h-10 w-10 bg-slate-200 rounded-2xl flex items-center justify-center text-slate-700 font-bold shadow-lg">
+                            {family ? (family.display_initials || (family.name || '').slice(0,2).toUpperCase()) : ''}
+                        </div>
+                    </div>
+                </header>
+
+                {/* Sekcja Zarządzania Rodziną (API Connect) */}
+                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 mb-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+                            <Users size={24} />
+                        </div>
+                        <h2 className="text-xl font-bold text-slate-800">Twoja Rodzina</h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <p className="text-slate-600 mb-4">Wpisz nazwę rodziny, aby stworzyć nową grupę lub dołączyć do istniejącej.</p>
+                            <div className="flex flex-col gap-3">
+                                <input
+                                    type="text"
+                                    value={familyName}
+                                    onChange={(e) => setFamilyName(e.target.value)}
+                                    placeholder="Nazwa rodziny..."
+                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-slate-700"
+                                />
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleCreateFamily}
+                                        disabled={loading || !familyName}
+                                        className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-100 flex items-center justify-center gap-2"
+                                    >
+                                        <Shield size={18} /> Utwórz
+                                    </button>
+                                    <button
+                                        onClick={handleJoinFamily}
+                                        disabled={loading || !familyName}
+                                        className="flex-1 bg-white border-2 border-slate-100 hover:border-blue-100 hover:bg-blue-50 disabled:opacity-50 text-slate-700 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <UserPlus size={18} /> Dołącz
+                                    </button>
+                                </div>
+                            </div>
+
+                            {status.message && (
+                                <div className={`mt-4 p-4 rounded-xl text-sm font-medium ${
+                                    status.type === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
+                                }`}>
+                                    {status.message}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-slate-50 rounded-[24px] p-6 flex flex-col justify-center items-center text-center border border-dashed border-slate-200">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm">
+                                <Target className="text-slate-300" size={32} />
+                            </div>
+                            <h3 className="font-bold text-slate-800 mb-1">{family ? 'Aktywna grupa' : 'Brak aktywnej grupy'}</h3>
+                            <p className="text-sm text-slate-500">{family ? (family.description || 'Zacznij zarządzać zadaniami.') : 'Stwórz rodzinę, aby zacząć zbierać punkty i zarządzać zadaniami.'}</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                    {/* LEWA KOLUMNA: POZOSTAJE BEZ ZMIAN (KONDYCJA, STREAKI I TINDER) */}
-                    <div className="lg:col-span-1 space-y-8">
-                        {/* Karta: Twoja Kondycja */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
-                            <h2 className="text-slate-500 font-bold uppercase tracking-widest text-sm mb-6">Twoja Kondycja</h2>
-                            <div className="relative inline-flex items-center justify-center mb-6">
-                                <svg className="w-40 h-40 transform -rotate-90">
-                                    <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-slate-100" />
-                                    <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="440" strokeDashoffset="0" className="text-blue-600" />
-                                </svg>
-                                <span className="absolute text-4xl font-black text-slate-900">100%</span>
+                {/* Statystyki / Placeholdery */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                                <Target size={20} />
                             </div>
-                            <p className="text-blue-600 font-bold bg-blue-50 py-2 rounded-xl">Status: Bezpieczny</p>
+                            <span className="font-bold text-slate-700">Aktywne Cele</span>
                         </div>
-
-                        {/* Karta: System Streaków */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
-                            <h2 className="text-slate-500 font-bold uppercase tracking-widest text-sm mb-4">System Streaków</h2>
-                            <div className="flex items-center justify-center gap-3 mb-4">
-                                <div className="bg-emerald-100 p-3 rounded-full">
-                                    <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-                                </div>
-                                <span className="text-3xl font-black text-slate-900">14 Dni</span>
-                            </div>
-                            <p className="text-sm text-slate-500 leading-relaxed">
-                                Nagradzamy każdy dzień bez wpadki i regularną edukację.
-                            </p>
-                        </div>
-
-                        {/* Karta: Tinder dla phishingu */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
-                            <div className="flex items-center justify-center gap-3 mb-4">
-                                <Gamepad2 className="w-8 h-8 text-indigo-600" />
-                                <h3 className="font-bold text-xl text-slate-900">Tinder dla phishingu</h3>
-                            </div>
-                            <p className="text-sm text-slate-500 mb-6 leading-relaxed">
-                                Szybka gra typu swipe: zdecyduj w sekundę, czy wiadomość jest bezpieczna, aby utrzymać swoją tarczę.
-                            </p>
-                            <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 transition-all">
-                                Rozpocznij Trening
-                            </button>
-                        </div>
+                        <div className="text-2xl font-black text-slate-900">{stats.goals}</div>
                     </div>
 
-                    {/* ŚRODEK I PRAWA: KAFELKI ZMIENIONE POD KĄTEM RODZINY */}
-                    <div className="lg:col-span-2 space-y-8">
-
-                        {/* Karta: Alerty Rodzinne (Zamiast Aktywnej Tarczy) */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                            <div className="flex items-center gap-3 mb-6">
-                                <Bell className="w-8 h-8 text-blue-600" />
-                                <h2 className="text-2xl font-bold text-slate-900">Alerty Rodzinne</h2>
+                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
+                                <MessageSquare size={20} />
                             </div>
-                            <p className="text-slate-500 mb-6">Powiadomienia o zagrożeniach wykrytych u Twoich bliskich w czasie rzeczywistym.</p>
-
-                            <div className="space-y-4">
-                                {/* Alert dotyczący Babci */}
-                                <div className="flex items-start gap-4 bg-red-50 p-4 rounded-2xl border border-red-100 transition hover:shadow-md">
-                                    <AlertTriangle className="w-6 h-6 text-red-500 mt-1 shrink-0" />
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-center">
-                                            <h3 className="font-bold text-red-900">Wykryto zagrożenie! (Babcia Krysia)</h3>
-                                            <span className="text-[10px] bg-red-200 text-red-700 font-bold px-2 py-0.5 rounded uppercase">Pilne</span>
-                                        </div>
-                                        <p className="text-sm text-red-700 mt-1">Babcia próbowała wejść w fałszywy link z SMS ("Niedopłata za paczkę"). SafeGuard AI zablokował połączenie.</p>
-                                        <button className="mt-3 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-red-700 transition">
-                                            Zadzwoń do Babci
-                                        </button>
-                                    </div>
-                                </div>
-                                {/* Alert dotyczący Mamy */}
-                                <div className="flex items-start gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 transition hover:shadow-md">
-                                    <ShieldCheck className="w-6 h-6 text-emerald-500 mt-1 shrink-0" />
-                                    <div>
-                                        <h3 className="font-bold text-slate-700">Wiadomość zweryfikowana (Mama)</h3>
-                                        <p className="text-sm text-slate-500 mt-1">Ostatnia wiadomość e-mail z banku została zweryfikowana jako bezpieczna.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <span className="font-bold text-slate-700">Wiadomości</span>
                         </div>
+                        <div className="text-2xl font-black text-slate-900">{stats.messages}</div>
+                    </div>
 
-                        {/* Karta: Podopieczni Parasola (Niebieska karta, skupiona tylko na podopiecznych) */}
-                        <div className="bg-blue-600 p-8 rounded-3xl shadow-md text-white">
-                            <div className="flex items-center gap-3 mb-6">
-                                <Users className="w-8 h-8 text-blue-200" />
-                                <h2 className="text-2xl font-bold">Podopieczni Parasola</h2>
-                            </div>
-                            <p className="text-blue-100 mb-8 max-w-lg">
-                                Monitoruj status bezpieczeństwa członków swojej rodziny. System poinformuje Cię, gdy ich Cyber-Kondycja spadnie.
-                            </p>
-
-                            <div className="grid md:grid-cols-2 gap-4">
-                                {/* Profil Mamy */}
-                                <div className="bg-white/10 p-6 rounded-2xl border border-white/20 text-center backdrop-blur-sm transition hover:bg-white/20 flex flex-col items-center">
-                                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center font-bold mb-3 text-xl">M</div>
-                                    <p className="text-sm text-blue-200 uppercase font-bold mb-1">Mama</p>
-                                    <p className="font-bold text-xl">95% Bezpieczna</p>
-                                </div>
-                                {/* Profil Babci */}
-                                <div className="bg-red-500/20 p-6 rounded-2xl border border-red-400/50 text-center backdrop-blur-sm animate-pulse flex flex-col items-center">
-                                    <div className="w-12 h-12 rounded-full bg-red-500/40 flex items-center justify-center font-bold mb-3 text-xl text-white">BK</div>
-                                    <p className="text-sm text-red-200 uppercase font-bold mb-1 flex justify-center items-center gap-1">
-                                        <AlertTriangle className="w-4 h-4" /> Babcia Krysia
-                                    </p>
-                                    <p className="font-bold text-red-100 text-xl">Zagrożenie!</p>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-3xl text-white shadow-lg shadow-blue-100">
+                        <h3 className="font-bold mb-2">Premium Status</h3>
+                        <p className="text-blue-100 text-sm mb-4">{stats.premium ? 'Twoja rodzina ma abonament Plus.' : 'Twoja rodzina korzysta z darmowego planu.'}</p>
+                        <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-xl font-bold transition-colors text-sm">
+                            Sprawdź Plus
+                        </button>
                     </div>
                 </div>
             </div>

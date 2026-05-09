@@ -9,7 +9,7 @@ const authService = {
                 email: userData.email,
                 password: userData.password
             };
-            const response = await api.post('/register', payload);
+            const response = await api.post('/auth/register', payload);
             return response.data;
         } catch (err) {
             const serverMessage = err?.response?.data?.error || err?.response?.data?.message || err?.message;
@@ -21,7 +21,7 @@ const authService = {
 
     login: async (credentials) => {
         try {
-            const response = await api.post('/login', credentials);
+            const response = await api.post('/auth/login', credentials);
             if (response.data.access_token) {
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
@@ -37,7 +37,7 @@ const authService = {
 
     refreshToken: async () => {
         const refreshToken = localStorage.getItem('refresh_token');
-        const response = await api.post('/refresh', {}, {
+        const response = await api.post('/auth/refresh', {}, {
             headers: { Authorization: `Bearer ${refreshToken}` }
         });
         if (response.data.access_token) {
@@ -48,11 +48,11 @@ const authService = {
 
     logout: async () => {
         try {
-            await api.post('/logout');
+            await api.post('/auth/logout');
         } finally {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
-            window.location.href = '/login';
+            window.location.href = '/';
         }
     }
 };
