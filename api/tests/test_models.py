@@ -1,6 +1,8 @@
 import os
-import joblib
+
 import pytest
+
+from app.services.llm_service import generate_spam_explanation
 from app.services.predict_service import load_models, get_prediction
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +28,16 @@ def test_sms_spam_prediction():
     assert result['is_spam'] is True
     assert result['confidence'] > 0.8
 
+    explanation = generate_spam_explanation(SMS_SPAM_TEXT, 'sms', result['confidence'])
+
+    print("\n" + "=" * 50)
+    print(f"🛑 TEST SMS SPAM (Pewność: {result['confidence']:.2%})")
+    print(f"Wiadomość: {SMS_SPAM_TEXT}")
+    print(f"🤖 Wyjaśnienie LLM:\n{explanation}")
+    print("=" * 50 + "\n")
+
+    assert explanation is not None
+
 def test_sms_ham_prediction():
     result = get_prediction('sms', SMS_HAM_TEXT)
     assert result['is_spam'] is False
@@ -34,6 +46,16 @@ def test_sms_ham_prediction():
 def test_email_phishing_prediction():
     result = get_prediction('email', EMAIL_PHISHING_TEXT)
     assert result['is_spam'] is True
+
+    explanation = generate_spam_explanation(EMAIL_PHISHING_TEXT, 'email', result['confidence'])
+
+    print("\n" + "=" * 50)
+    print(f"🛑 TEST EMAIL PHISHING (Pewność: {result['confidence']:.2%})")
+    print(f"Wiadomość: {EMAIL_PHISHING_TEXT}")
+    print(f"🤖 Wyjaśnienie LLM:\n{explanation}")
+    print("=" * 50 + "\n")
+
+    assert explanation is not None
 
 
 def test_email_safe_prediction():
