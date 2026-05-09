@@ -3,6 +3,7 @@ import AuthLayout from './AuthLayout.js';
 import FormInput from '../../components/auth/FormInput.js';
 import SubmitButton from '../../components/auth/SubmitButton.js';
 import { useNavigate, Link } from 'react-router-dom';
+import { AuthService } from '../../services';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
@@ -34,17 +35,31 @@ const Login = () => {
             return;
         }
         setLoading(true);
-        // symulacja requestu
-        setTimeout(() => {
-            setLoading(false);
-            // symulujemy sukces
+        try {
+            // Wywołanie centralnego serwisu
+            await AuthService.login({
+                email: form.email,
+                password: form.password
+            });
             navigate('/');
-        }, 1000);
+        } catch (err) {
+            // Obsługa błędów z API Flaska
+            setErrors({
+                general: err.response?.data?.error || 'Błędny login lub hasło'
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <AuthLayout title="Zaloguj się" subtitle="Wprowadź dane do logowania">
             <form onSubmit={handleSubmit} className="space-y-4">
+                {errors.general && (
+                    <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded">
+                        {errors.general}
+                    </p>
+                )}
                 <FormInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />
                 <FormInput label="Hasło" name="password" type="password" value={form.password} onChange={handleChange} error={errors.password} />
                 <div className="pt-2">
@@ -59,4 +74,3 @@ const Login = () => {
 };
 
 export default Login;
-

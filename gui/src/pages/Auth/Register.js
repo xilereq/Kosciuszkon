@@ -3,6 +3,7 @@ import AuthLayout from './AuthLayout.js';
 import FormInput from '../../components/auth/FormInput.js';
 import SubmitButton from '../../components/auth/SubmitButton.js';
 import { useNavigate } from 'react-router-dom';
+import { AuthService } from '../../services';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
@@ -37,17 +38,32 @@ const Register = () => {
             return;
         }
         setLoading(true);
-        // symulacja requestu
-        setTimeout(() => {
-            setLoading(false);
-            // symulowany sukces - przekierowanie do logowania
+        try {
+            // Rejestracja przez serwis z mapowaniem pól na format API
+            await AuthService.register({
+                name: form.name,
+                email: form.email,
+                password: form.password
+            });
             navigate('/login');
-        }, 1200);
+        } catch (err) {
+            // Obsługa błędów walidacji z Flaska
+            setErrors({
+                general: err.response?.data?.error || 'Rejestracja nieudana. Użytkownik może już istnieć.'
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <AuthLayout title="Zarejestruj się" subtitle="Utwórz nowe konto">
             <form onSubmit={handleSubmit} className="space-y-4">
+                {errors.general && (
+                    <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded">
+                        {errors.general}
+                    </p>
+                )}
                 <FormInput label="Imię" name="name" value={form.name} onChange={handleChange} error={errors.name} />
                 <FormInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />
                 <FormInput label="Hasło" name="password" type="password" value={form.password} onChange={handleChange} error={errors.password} />
@@ -61,4 +77,3 @@ const Register = () => {
 };
 
 export default Register;
-
