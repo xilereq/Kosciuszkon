@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from app.services.llm_service import generate_spam_explanation
+from app.services.llm_service import generate_spam_explanation, generate_training_explanation
 from app.services.predict_service import load_models, get_prediction
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,3 +61,39 @@ def test_email_phishing_prediction():
 def test_email_safe_prediction():
     result = get_prediction('email', EMAIL_SAFE_TEXT)
     assert result['is_spam'] is False
+
+
+def test_training_explanation_missed_spam():
+    explanation = generate_training_explanation(
+        text=EMAIL_PHISHING_TEXT,
+        true_label='spam',
+        user_guess='safe',
+        msg_type='email'
+    )
+
+    print("\n" + "=" * 50)
+    print("🎓 TEST TRENINGOWY: Użytkownik NIE ZAUWAŻYŁ zagrożenia")
+    print(f"Wiadomość: {EMAIL_PHISHING_TEXT}")
+    print(f"🤖 Trener Gemini:\n{explanation}")
+    print("=" * 50 + "\n")
+
+    assert explanation is not None
+    assert "przeciążony" not in explanation
+
+
+def test_training_explanation_false_alarm():
+    explanation = generate_training_explanation(
+        text=EMAIL_SAFE_TEXT,
+        true_label='safe',
+        user_guess='spam',
+        msg_type='email'
+    )
+
+    print("\n" + "=" * 50)
+    print("🎓 TEST TRENINGOWY: Użytkownik FAŁSZYWIE oskarżył dobrą wiadomość")
+    print(f"Wiadomość: {EMAIL_SAFE_TEXT}")
+    print(f"🤖 Trener Gemini:\n{explanation}")
+    print("=" * 50 + "\n")
+
+    assert explanation is not None
+    assert "przeciążony" not in explanation
