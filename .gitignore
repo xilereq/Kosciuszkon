@@ -218,3 +218,5 @@ __marimo__/
 api/ml_pipeline/data/*.csv
 api/ml_pipeline/data/*.zip
 *.joblib
+gui/node_modules
+gui/package-lock.json
