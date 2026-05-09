@@ -39,12 +39,13 @@ def generate_spam_explanation(text: str, msg_type: str, confidence: float) -> st
     confidence_percent = round(confidence * 100, 1)
 
     prompt = (
-        f"Przeanalizuj poniższą wiadomość ({msg_type}). Nasz główny system wykrywania zagrożeń "
-        f"ocenił z pewnością {confidence_percent}%, że jest to próba oszustwa/spamu.\n\n"
-        f"Twoje zadanie: Napisz w 1-2 zdaniach wyjaśnienie dla użytkownika.\n"
-        f"- Jeśli pewność wynosi powyżej 80%, wskaż stanowczo, co zdradza oszustwo (np. linki, podszywanie się).\n"
-        f"- Jeśli pewność wynosi poniżej 80%, użyj tonu doradczego – wskaż elementy, które wzbudziły podejrzenia "
-        f"algorytmu, ale zaznacz, że sytuacja nie jest jednoznaczna.\n\n"
+        f"Poniższa wiadomość ({msg_type}) została oflagowana jako potencjalne oszustwo lub spam.\n\n"
+        f"Twoje zadanie: Napisz bardzo krótkie ostrzeżenie dla użytkownika (maksymalnie 1-2 zdania). "
+        f"Wskaż wprost konkretne elementy, które zdradzają oszustwo (np. podejrzany link, presja czasu, żądanie dopłaty).\n\n"
+        f"ZASADY:\n"
+        f"- Podawaj konkretne informacje, bez zbędnych dodatków."
+        f"- Kategorycznie zabraniam używania słów takich jak 'algorytm', 'system', 'prawdopodobieństwo' czy podawania jakichkolwiek procentów.\n"
+        f"- Bądź zwięzły i konkretny.\n\n"
         f"Wiadomość do analizy:\n\"{text}\""
     )
 
