@@ -1,4 +1,5 @@
 const API_ENDPOINT = "http://localhost:5000/api/scan/analyze";
+const DB_ENDPOINT = "http://localhost:5000/api/notification/add";
 let processedEmailIds = new Set();
 
 async function verifyContentWithBackend(extractedData) {
@@ -6,7 +7,7 @@ async function verifyContentWithBackend(extractedData) {
   const token = storage.access_token;
 
   if (!token) {
-    return { status: "UNAUTHORIZED", message: "Zaloguj się we wtyczce" };
+    return { status: "UNAUTHORIZED" };
   }
 
   const response = await fetch(API_ENDPOINT, {
@@ -21,7 +22,80 @@ async function verifyContentWithBackend(extractedData) {
   return await response.json();
 }
 
-function showPhishingPopup(aiExplanation) {
+async function saveAlertToDatabase(payload, result) {
+  const storage = await chrome.storage.local.get(["access_token"]);
+  const token = storage.access_token;
+
+  if (!token) {
+    return;
+  }
+
+  const dbData = {
+    title: payload.title || "Podejrzany e-mail",
+    sender: payload.sender || "Nieznany",
+    probability: result.confidence !== undefined ? result.confidence / 100 : 0.85,
+    content: result.message || "Wykryto potencjalne zagrożenie.",
+    created_at: new Date().toISOString(),
+    type: "email"
+  };
+
+  fetch(DB_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify(dbData)
+  }).catch(err => console.error(err));
+}
+
+function showYellowWarning(message, confidence) {
+  const warning = document.createElement("div");
+  warning.style.position = "fixed";
+  warning.style.top = "20px";
+  warning.style.right = "20px";
+  warning.style.width = "300px";
+  warning.style.backgroundColor = "#fef9c3";
+  warning.style.border = "1px solid #facc15";
+  warning.style.borderRadius = "8px";
+  warning.style.padding = "16px";
+  warning.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+  warning.style.zIndex = "999999";
+  warning.style.fontFamily = "sans-serif";
+
+  const header = document.createElement("div");
+  header.style.color = "#854d0e";
+  header.style.fontWeight = "bold";
+  header.style.fontSize = "14px";
+  header.style.marginBottom = "8px";
+  header.innerText = "⚠️ Ostrzeżenie (" + confidence + "%)";
+
+  const body = document.createElement("div");
+  body.style.fontSize = "13px";
+  body.style.color = "#713f12";
+  body.style.lineHeight = "1.4";
+  body.innerText = message;
+
+  const btn = document.createElement("button");
+  btn.style.marginTop = "12px";
+  btn.style.backgroundColor = "#facc15";
+  btn.style.color = "#422006";
+  btn.style.border = "none";
+  btn.style.borderRadius = "4px";
+  btn.style.padding = "6px 12px";
+  btn.style.fontSize = "12px";
+  btn.style.fontWeight = "bold";
+  btn.style.cursor = "pointer";
+  btn.innerText = "Zrozumiałem";
+  btn.onclick = () => warning.remove();
+
+  warning.appendChild(header);
+  warning.appendChild(body);
+  warning.appendChild(btn);
+  document.body.appendChild(warning);
+}
+
+function showRedDangerPopup(aiExplanation, confidence) {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
@@ -42,60 +116,55 @@ function showPhishingPopup(aiExplanation) {
   card.style.width = "400px";
   card.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.15)";
   card.style.fontFamily = "sans-serif";
-  card.style.color = "#1e293b";
   card.style.textAlign = "center";
 
-  const shieldSvg = document.createElement("div");
-  shieldSvg.innerHTML = '<svg width="64" height="64" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v5h-2V7zm0 7h2v2h-2v-2z"/></svg>';
+  const shield = document.createElement("div");
+  shield.innerHTML = '<svg width="64" height="64" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v5h-2V7zm0 7h2v2h-2v-2z"/></svg>';
 
   const title = document.createElement("div");
   title.style.fontSize = "20px";
   title.style.fontWeight = "bold";
   title.style.marginTop = "16px";
   title.style.color = "#0f172a";
-  title.innerText = "Podejrzenie próby phishingu";
+  title.innerText = "Krytyczne zagrożenie (" + confidence + "%)";
 
   const separator = document.createElement("div");
   separator.style.height = "1px";
   separator.style.backgroundColor = "#e2e8f0";
   separator.style.margin = "20px 0";
 
-  const contentBox = document.createElement("div");
-  contentBox.style.textAlign = "left";
-  contentBox.style.fontSize = "15px";
-  contentBox.style.lineHeight = "1.5";
-  contentBox.style.color = "#334155";
-  contentBox.style.marginBottom = "24px";
-  contentBox.innerText = aiExplanation;
+  const content = document.createElement("div");
+  content.style.textAlign = "left";
+  content.style.fontSize = "14px";
+  content.style.lineHeight = "1.5";
+  content.style.color = "#334155";
+  content.style.marginBottom = "24px";
+  content.innerText = aiExplanation;
 
-  const blockButton = document.createElement("button");
-  blockButton.style.backgroundColor = "#ef4444";
-  blockButton.style.color = "#ffffff";
-  blockButton.style.border = "none";
-  blockButton.style.borderRadius = "25px";
-  blockButton.style.padding = "12px 0";
-  blockButton.style.width = "100%";
-  blockButton.style.fontSize = "16px";
-  blockButton.style.fontWeight = "bold";
-  blockButton.style.cursor = "pointer";
-  blockButton.style.boxShadow = "0 4px 10px rgba(239, 68, 68, 0.3)";
-  blockButton.innerText = "Zablokuj nadawcę";
+  const btn = document.createElement("button");
+  btn.style.backgroundColor = "#ef4444";
+  btn.style.color = "#ffffff";
+  btn.style.border = "none";
+  btn.style.borderRadius = "25px";
+  btn.style.padding = "12px 0";
+  btn.style.width = "100%";
+  btn.style.fontSize = "16px";
+  btn.style.fontWeight = "bold";
+  btn.style.cursor = "pointer";
+  btn.style.boxShadow = "0 4px 10px rgba(239, 68, 68, 0.3)";
+  btn.innerText = "Zrozumiałem";
+  btn.onclick = () => overlay.remove();
 
-  blockButton.addEventListener("click", () => {
-    overlay.remove();
-  });
-
-  card.appendChild(shieldSvg);
+  card.appendChild(shield);
   card.appendChild(title);
   card.appendChild(separator);
-  card.appendChild(contentBox);
-  card.appendChild(blockButton);
+  card.appendChild(content);
+  card.appendChild(btn);
   overlay.appendChild(card);
-
   document.body.appendChild(overlay);
 }
 
-function extractMetadataAndScan(targetBodyElement, rawText, activeContainer) {
+function extractMetadataAndScan(targetElement, rawText, activeContainer) {
   let payload = {
     text: rawText.trim(),
     source_type: "email",
@@ -111,13 +180,18 @@ function extractMetadataAndScan(targetBodyElement, rawText, activeContainer) {
   const senderObj = activeContainer.querySelector("span[email]");
   if (senderObj) {
     const name = senderObj.getAttribute("name") || senderObj.innerText;
-    const emailAddr = senderObj.getAttribute("email");
-    payload.sender = name + " (" + emailAddr + ")";
+    const email = senderObj.getAttribute("email");
+    payload.sender = name + " (" + email + ")";
   }
 
   verifyContentWithBackend(payload).then(apiResult => {
-    if (apiResult && apiResult.status === "DANGER") {
-      showPhishingPopup(apiResult.message);
+    if (apiResult && (apiResult.status === "DANGER" || apiResult.status === "WARNING")) {
+      saveAlertToDatabase(payload, apiResult);
+      if (apiResult.status === "DANGER") {
+        showRedDangerPopup(apiResult.message, apiResult.confidence);
+      } else {
+        showYellowWarning(apiResult.message, apiResult.confidence);
+      }
     }
   }).catch(error => console.error(error));
 }
@@ -129,48 +203,45 @@ function findAndAnalyzeMessages() {
   }
 
   const currentHash = window.location.hash;
-  if (!currentHash.includes("#inbox/")) {
+  let emailId = "";
+
+  if (currentHash.includes("#inbox/")) {
+    emailId = currentHash.split("#inbox/")[1].trim();
+  } else if (currentHash.includes("#spam/")) {
+    emailId = currentHash.split("#spam/")[1].trim();
+  }
+
+  if (!emailId || processedEmailIds.has(emailId)) {
     return;
   }
 
-  const parts = currentHash.split("#inbox/");
-  if (parts.length < 2 || parts[1].trim() === "") {
+  const activeContainer = document.querySelector("[role='main']");
+  if (!activeContainer) {
     return;
   }
 
-  const currentEmailId = parts[1].trim();
-  if (processedEmailIds.has(currentEmailId)) {
-    return;
-  }
-
-  const activeMailContainer = document.querySelector("[role='main']");
-  if (!activeMailContainer) {
-    return;
-  }
-
-  const mailBodies = activeMailContainer.querySelectorAll("div.a3s, div[dir='ltr']");
+  const mailBodies = activeContainer.querySelectorAll("div.a3s, div[dir='ltr']");
   if (mailBodies.length === 0) {
     return;
   }
 
-  processedEmailIds.add(currentEmailId);
-
+  processedEmailIds.add(emailId);
   let fullText = "";
-  let targetBodyElement = null;
+  let targetElement = null;
 
-  for (let bodyElement of mailBodies) {
-    if (bodyElement.innerText && bodyElement.innerText.length > 15) {
-      fullText += bodyElement.innerText + "\n";
-      targetBodyElement = bodyElement;
+  for (let body of mailBodies) {
+    if (body.innerText && body.innerText.length > 15) {
+      fullText += body.innerText + "\n";
+      targetElement = body;
     }
   }
 
-  if (!targetBodyElement || fullText.trim().length < 15) {
-    processedEmailIds.delete(currentEmailId);
+  if (!targetElement || fullText.trim().length < 15) {
+    processedEmailIds.delete(emailId);
     return;
   }
 
-  extractMetadataAndScan(targetBodyElement, fullText, activeMailContainer);
+  extractMetadataAndScan(targetElement, fullText, activeContainer);
 }
 
 const pageObserver = new MutationObserver(() => {

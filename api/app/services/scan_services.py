@@ -1,6 +1,7 @@
 from app.services.llm_service import generate_spam_explanation
 from app.services.predict_service import get_prediction
 
+
 def analyze_text_content(text: str) -> dict:
     try:
         prediction_result = get_prediction('email', text)
@@ -14,8 +15,11 @@ def analyze_text_content(text: str) -> dict:
                 msg_type='email',
                 confidence=confidence
             )
+
+            status = "DANGER" if confidence_percent > 80 else "WARNING"
+
             return {
-                "status": "DANGER",
+                "status": status,
                 "confidence": confidence_percent,
                 "message": explanation
             }
