@@ -220,3 +220,7 @@ api/ml_pipeline/data/*.zip
 *.joblib
 gui/node_modules
 gui/package-lock.json
+
+
+# Aditional skrypts
+toFile.py
