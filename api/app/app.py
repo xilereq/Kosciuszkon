@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
 from app.db import Base, engine
+from app.services.predict_service import load_models
 
 load_dotenv()
 
@@ -37,5 +38,6 @@ def create_app():
     with app.app_context():
         from app.models import Family, User, UserFamily # noqa
         Base.metadata.create_all(bind=engine)
+        load_models()
 
     return app
