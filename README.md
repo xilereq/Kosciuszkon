@@ -1,4 +1,4 @@
-# 🛡️ Kompleksowa Platforma Anty-Phishingowa (Nazwa Robocza)
+# ScamRadar
 
 System składający się z aplikacji oraz wtycznki internetowej (docelowo również zawiera aplikację mobilną), który skutecznie łączy **aktywną ochronę przed cyberzagrożeniami** z **interaktywną edukacją**. Naszym celem jest budowa świadomości użytkowników na każdym poziomie zaawansowania technologicznego – od dziecka po seniora.
 
