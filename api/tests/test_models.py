@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from app.services.llm_service import generate_spam_explanation, \
+from app.services import generate_spam_explanation, \
     generate_training_explanation
-from app.services.predict_service import get_prediction, load_models
+from app.services import get_prediction, load_models
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ML_MODELS_DIR = os.path.join(BASE_DIR, 'ml_models')
