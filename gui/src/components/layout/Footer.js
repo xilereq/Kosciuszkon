@@ -12,7 +12,7 @@ const Footer = () => {
                 <div className="col-span-2">
                     <div className="flex items-center gap-3 mb-4">
                         <ShieldCheck className="w-8 h-8 text-purple-400" />
-                        <span className="text-xl font-black bg-gradient-to-r from-purple-400 to-fuchsia-400 bg-clip-text text-transparent">SafeGuard AI</span>
+                        <span className="text-xl font-black bg-gradient-to-r from-purple-400 to-fuchsia-400 bg-clip-text text-transparent">ScamRadar</span>
                     </div>
                     <p className="max-w-xs text-slate-400 leading-relaxed text-sm">Innowacyjna platforma ochrony przed oszustwami cyfrowymi. Misja: Bezpieczny internet dla każdego pokolenia.</p>
                 </div>
@@ -39,7 +39,7 @@ const Footer = () => {
             </div>
 
             <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="text-slate-500 text-xs">© {new Date().getFullYear()} SafeGuard AI. Wszelkie prawa zastrzeżone.</div>
+                <div className="text-slate-500 text-xs">© {new Date().getFullYear()} ScamRadar. Wszelkie prawa zastrzeżone.</div>
                 <div className="flex items-center gap-4 text-slate-400 text-xs">
                     <span className="cursor-pointer hover:text-purple-400 transition-colors">Polityka Prywatności</span>
                     <span className="cursor-pointer hover:text-purple-400 transition-colors">Regulamin</span>

@@ -1,4 +1,4 @@
-import {FamilyUmbrella, Features, Hero, Partners} from "../../components";
+import {FamilyUmbrella, Features, Hero } from "../../components";
 import React from "react";
 
 const Dashboard = () => {
@@ -6,7 +6,6 @@ const Dashboard = () => {
         <Hero />
         <Features />
         <FamilyUmbrella />
-        <Partners />
     </>);
 }
 export default Dashboard;
