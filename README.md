@@ -99,34 +99,34 @@ http://localhost:3000/
 │   │    │    └── 📄 sms_spam.csv        # Dane treningowe dla wiadomości sms
 │   │    ├── 📄 import_csv.py            # Inicjalizacja tabeli w bazie danych do wiadomości "tinder"
 │   │    └── 📄 train.py                 # Trenowanie modeli i ich zapis do pliku 
-|   ├── 📄 run.py                        # Główny plik uruchamiający serwer (pakiet app)
-├── 📂 gui/ 
-│   ├── 📂 public/                       # Pliki statyczne
-│   ├── 📄 favicon.svg                   # Ikona strony
-│   ├── 📄 icons.svg                     # Zbiór ikon wektorowych
-│   ├── 📄 index.html                    # Główny plik HTML aplikacji
-│   ├── 📂 src/                          # Frontend (React)
-│   │   ├── 📂 assets/                   # Grafiki i ikony (m m.in. hero.png, react.svg, vite.svg)
-│   │   ├── 📂 components/               # Komponenty wielokrotnego użytku
-│   │   │   ├── 📂 auth/                 # Komponenty formularzy (FormInput.js, SubmitButton.js)
-│   │   │   ├── 📂 layout/               # Elementy układu (Navbar.js, Footer.js, layout.css)
-│   │   │   └── 📂 sections/             # Większe sekcje podzielone na odpowiednie widoki:
-│   │   │       ├── 📂 FamilyDashboard/  # Sekcje panelu rodziny (np. MemberList, FamilyManagement)
-│   │   │       ├── 📂 MainDashboard/    # Sekcje strony głównej (np. Hero, Features, Partners)
-│   │   │       └── 📂 UserDashboard/    # Sekcje panelu użytkownika (np. ActiveShield, AnalysisLab)
-│   │   ├── 📂 pages/                    # Główne widoki/strony aplikacji
-│   │   │   ├── 📂 Auth/                 # Strony autoryzacji (Login.js, Register.js, AuthLayout.js)
-│   │   │   └── 📂 Dashboard/            # Strony paneli (Dashboard.js, FamilyDashboard.js, UserDashboard.js)
-│   │   ├── 📂 services/                 # Logika biznesowa i komunikacja z API (api.js oraz poszczególne serwisy m.in. AuthService, FamilyService)
-│   │   ├── 📄 App.js                    # Główny komponent i routing
-│   │   ├── 📄 index.js                  # Główny plik eksportujący/agregujący
-│   │   ├── 📄 index.css                 # Główne style (Tailwind CSS)
-│   │   ├── 📄 main.js                   # Punkt wejścia aplikacji React (charakterystyczny dla Vite)
-│   │   └── 📄 reportWebVitals.js        # Pomiary wydajności (Web Vitals)
-│   ├── 📄 app.py                        # Główny plik startowy serwera backendowego (Python)
-│   ├── 📄 package.json                  # Konfiguracja projektu frontendowego, skrypty i zależności npm
-│   ├── 📄 package-lock.json             # Zablokowane, dokładne wersje drzewa zależności npm
-│   ├── 📄 postcss.config.js             # Konfiguracja narzędzia PostCSS
-│   ├── 📄 tailwind.config.js            # Konfiguracja stylów Tailwind CSS
-│   └── 📄 README.md                     # Dokumentacja projektu
+│   ├── 📄 run.py                        # Główny plik uruchamiający serwer (pakiet app)
+└── 📂 gui/ 
+    ├── 📂 public/                       # Pliki statyczne
+    ├── 📄 favicon.svg                   # Ikona strony
+    ├── 📄 icons.svg                     # Zbiór ikon wektorowych
+    ├── 📄 index.html                    # Główny plik HTML aplikacji
+    ├── 📂 src/                          # Frontend (React)
+    │   ├── 📂 assets/                   # Grafiki i ikony (m m.in. hero.png, react.svg, vite.svg)
+    │   ├── 📂 components/               # Komponenty wielokrotnego użytku
+    │   │   ├── 📂 auth/                 # Komponenty formularzy (FormInput.js, SubmitButton.js)
+    │   │   ├── 📂 layout/               # Elementy układu (Navbar.js, Footer.js, layout.css)
+    │   │   └── 📂 sections/             # Większe sekcje podzielone na odpowiednie widoki:
+    │   │       ├── 📂 FamilyDashboard/  # Sekcje panelu rodziny (np. MemberList, FamilyManagement)
+    │   │       ├── 📂 MainDashboard/    # Sekcje strony głównej (np. Hero, Features, Partners)
+    │   │       └── 📂 UserDashboard/    # Sekcje panelu użytkownika (np. ActiveShield, AnalysisLab)
+    │   ├── 📂 pages/                    # Główne widoki/strony aplikacji
+    │   │   ├── 📂 Auth/                 # Strony autoryzacji (Login.js, Register.js, AuthLayout.js)
+    │   │   └── 📂 Dashboard/            # Strony paneli (Dashboard.js, FamilyDashboard.js, UserDashboard.js)
+    │   ├── 📂 services/                 # Logika biznesowa i komunikacja z API (api.js oraz poszczególne serwisy m.in. AuthService, FamilyService)
+    │   ├── 📄 App.js                    # Główny komponent i routing
+    │   ├── 📄 index.js                  # Główny plik eksportujący/agregujący
+    │   ├── 📄 index.css                 # Główne style (Tailwind CSS)
+    │   ├── 📄 main.js                   # Punkt wejścia aplikacji React (charakterystyczny dla Vite)
+    │   └── 📄 reportWebVitals.js        # Pomiary wydajności (Web Vitals)
+    ├── 📄 app.py                        # Główny plik startowy serwera backendowego (Python)
+    ├── 📄 package.json                  # Konfiguracja projektu frontendowego, skrypty i zależności npm
+    ├── 📄 package-lock.json             # Zablokowane, dokładne wersje drzewa zależności npm
+    ├── 📄 postcss.config.js             # Konfiguracja narzędzia PostCSS
+    ├── 📄 tailwind.config.js            # Konfiguracja stylów Tailwind CSS
+    └── 📄 README.md                     # Dokumentacja projektu
 ```
