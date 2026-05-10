@@ -25,6 +25,16 @@ const FamilyService = {
         return response.data;
     },
 
+    getMemberData: async (memberId) => {
+        try {
+            const response = await api.get(`/family/member/${memberId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Błąd podczas pobierania danych członka:', error);
+            return null;
+        }
+    },
+
     amIBoss: async () => {
         try {
             const response = await api.get('/family/am_i_boss');
