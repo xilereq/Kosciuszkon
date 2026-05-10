@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthLayout from './AuthLayout.js';
 import FormInput from '../../components/auth/FormInput.js';
 import SubmitButton from '../../components/auth/SubmitButton.js';
@@ -11,6 +11,10 @@ const Login = ({onLoginSuccess}) => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
