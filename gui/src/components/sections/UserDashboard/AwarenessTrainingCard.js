@@ -10,11 +10,40 @@ const AwarenessTrainingCard = () => {
     const [feedback, setFeedback] = useState(null);
     const [showFeedback, setShowFeedback] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [dragKey, setDragKey] = useState(0);
+    const [isSwipingOut, setIsSwipingOut] = useState(false);
+    const [swipeX, setSwipeX] = useState(0);
+    const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
 
     const statsRef = useRef({
         correct: 0,
         total: 0,
     });
+
+    const handleDragEnd = async (event, info) => {
+        if (!currentMessage || isSubmitting || isSwipingOut) return;
+        const offsetX = info.offset.x;
+        const threshold = 120;
+
+        if (offsetX > threshold) {
+            setSwipeX(500);
+            setIsSwipingOut(true);
+            setIsAwaitingResponse(true);
+            await new Promise((res) => setTimeout(res, 260));
+            await handleSwipe('safe');
+            setIsAwaitingResponse(false);
+            setDragKey((k) => k + 1);
+        } else if (offsetX < -threshold) {
+            setSwipeX(-500);
+            setIsSwipingOut(true);
+            setIsAwaitingResponse(true);
+            await new Promise((res) => setTimeout(res, 260));
+            await handleSwipe('spam');
+            setIsAwaitingResponse(false);
+            setDragKey((k) => k + 1);
+        } else {
+        }
+    };
 
     const startSession = async () => {
         setIsPlaying(true);
@@ -37,6 +66,8 @@ const AwarenessTrainingCard = () => {
             });
             setShowFeedback(true);
         } finally {
+            setIsSwipingOut(false);
+            setSwipeX(0);
             setIsLoading(false);
         }
     };
@@ -83,6 +114,9 @@ const AwarenessTrainingCard = () => {
         setFeedback(null);
         setShowFeedback(false);
         statsRef.current = { correct: 0, total: 0 };
+        // ensure swipe state reset on end
+        setIsSwipingOut(false);
+        setSwipeX(0);
     };
 
     if (!isPlaying) {
@@ -159,11 +193,15 @@ const AwarenessTrainingCard = () => {
                     </motion.div>
                 ) : currentMessage && !showFeedback ? (
                     <motion.div
-                        key={currentMessage.message_id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        key={`${currentMessage.message_id}-${dragKey}`}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={isSwipingOut ? { x: swipeX, opacity: 0, transition: { duration: 0.25 } } : { opacity: 1, scale: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="space-y-6"
+                        drag={isSwipingOut ? false : "x"}
+                        dragElastic={0.3}
+                        onDragEnd={handleDragEnd}
+                        whileDrag={{ scale: 1.02 }}
+                        className={`space-y-6 ${isSwipingOut ? 'pointer-events-none' : 'cursor-grab'}`}
                     >
                         <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
                             <p className="text-sm text-purple-200 mb-4 font-semibold">
@@ -174,34 +212,35 @@ const AwarenessTrainingCard = () => {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleSwipe('spam')}
-                                disabled={isSubmitting}
-                                className="py-4 px-4 bg-red-600/20 hover:bg-red-600/30 border-2 border-red-500 text-red-300 font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                                <AlertCircle className="w-5 h-5" />
-                                To Spam!
-                            </motion.button>
+                        <div className="flex items-center justify-center">
+                            <p className="text-sm text-slate-400">Przesuń w lewo — Spam; w prawo — Bezpieczne.</p>
+                        </div>
 
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleSwipe('safe')}
-                                disabled={isSubmitting}
-                                className="py-4 px-4 bg-green-600/20 hover:bg-green-600/30 border-2 border-green-500 text-green-300 font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                                <CheckCircle className="w-5 h-5" />
-                                Bezpieczne
-                            </motion.button>
+                        {/* Optional fallback buttons for keyboard/accessibility - visually subtle */}
+                        <div className="grid grid-cols-2 gap-4 opacity-0 pointer-events-none">
+                            <button onClick={() => handleSwipe('spam')} className="py-2 px-4">Spam</button>
+                            <button onClick={() => handleSwipe('safe')} className="py-2 px-4">Safe</button>
                         </div>
                     </motion.div>
                 ) : null}
 
                 <AnimatePresence>
-                    {showFeedback && feedback && (
+                    {/* Overlay shown while waiting for server response after swipe */}
+                    {isAwaitingResponse && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 flex items-center justify-center p-4 z-50"
+                        >
+                            <motion.div className="absolute inset-0 bg-black/40" />
+                            <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-sm w-full z-10 flex flex-col items-center gap-4">
+                                <Loader className="w-10 h-10 text-purple-400 animate-spin" />
+                                <p className="text-sm text-purple-200">Oczekiwanie na odpowiedź...</p>
+                            </div>
+                        </motion.div>
+                    )}
+                     {showFeedback && feedback && (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
