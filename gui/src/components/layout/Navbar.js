@@ -22,7 +22,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     <div className="flex items-center gap-2">
                         <ShieldCheck className="w-10 h-10 text-purple-600" />
                         <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
-                            SafeGuard AI
+                            ScamRadar
                         </span>
                     </div>
 
