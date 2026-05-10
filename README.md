@@ -79,6 +79,7 @@ http://localhost:3000/
 
 
 ## Struktura Aplikacji
+```bash
 📦 Katalog Główny
 ├── 📂 api/                          # Backend (FastAPI/Flask)
 │   ├── 📂 app/                      # Główny pakiet aplikacji
@@ -128,3 +129,4 @@ http://localhost:3000/
 ├── 📄 postcss.config.js             # Konfiguracja narzędzia PostCSS
 ├── 📄 tailwind.config.js            # Konfiguracja stylów Tailwind CSS
 └── 📄 README.md                     # Dokumentacja projektu
+```
