@@ -11,7 +11,7 @@ const FamilySidebar = ({ family, loading }) => (
             {loading ? <Loader2 className="animate-spin" /> : family?.members?.length > 0 ? (
                 family.members.map((member, idx) => {
                     const name = typeof member === 'object' ? (member.name || member.username) : member;
-                    const notifications = member.notifications || ((member.threats || 0) + (member.warnings || 0));
+                    const notifications = member.notification_count || ((member.threats || 0) + (member.warnings || 0));
                     const hasIssues = notifications > 0;
 
                     return (

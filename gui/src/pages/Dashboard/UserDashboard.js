@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FamilyService } from '../../services/';
+import { FamilyService, NotificationService } from '../../services/';
 import {SecurityHeader, FamilySidebar, AnalysisLab, ActiveShield, AwarenessTrainingCard} from '../../components';
 import { motion } from 'framer-motion';
 
 const UserDashboard = () => {
-    const events = [];
+    const [events, setEvents] = useState([]);
+
     const [family, setFamily] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSupervisor, setIsSupervisor] = useState(false);
@@ -26,7 +27,30 @@ const UserDashboard = () => {
                 setLoading(false);
             }
         };
+
+        const fetchNotifications = async () => {
+            try {
+                const data = await NotificationService.getAllNotifications();
+
+                if (data && data.notifications) {
+                    const mappedEvents = data.notifications.map(notif => ({
+                        title: notif.title,
+                        description: notif.content,
+                        date: new Date(notif.created_at).toLocaleString(),
+                        type: notif.type?.toLowerCase() || 'email',
+                        isThreat: notif.probability && notif.probability > 0.0,
+                        probability: notif.probability || 0
+                    }));
+
+                    setEvents(mappedEvents);
+                }
+            } catch (error) {
+                console.error("Błąd ładowania powiadomień:", error);
+            }
+        };
+
         fetchData();
+        fetchNotifications();
     }, []);
 
     return (
