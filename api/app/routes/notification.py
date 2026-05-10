@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from app.schemas import NotificationCreateRequest, \
     NotificationResponse, NotificationsList
 from app.services import add_notification_to_db, \
-    get_family_notifications_from_db
+    get_family_notifications_from_db, remove_notification_from_db
 
 notification_bp = Blueprint('notification', __name__,
                             url_prefix='/api/notification')
@@ -49,3 +49,18 @@ def get_my_notifications():
     )
 
     return jsonify(response_data.model_dump()), 200
+
+
+@notification_bp.route('remove/<int:notification_id>',
+                       methods=['DELETE'])
+@jwt_required()
+def delete_notification(notification_id):
+    current_user_id = get_jwt_identity()
+
+    success = remove_notification_from_db(notification_id,
+                                          current_user_id)
+
+    if success:
+        return jsonify({"message": "Powiadomienie usunięte"}), 200
+
+    abort(500, "Błąd podczas usuwania")
