@@ -23,7 +23,8 @@ dependencies = [
     "pandas",
     "scikit-learn",
     "deep_translator",
-    "langdetect"
+    "langdetect",
+    "pendulum"
 ]
 
 [tool.setuptools]
