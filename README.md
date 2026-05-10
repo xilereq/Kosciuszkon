@@ -53,6 +53,7 @@ Część serwerowa (API) została zaprojektowana z myślą o wysokiej wydajnośc
 ## Instalacja i Uruchomienie
 
 Projekt składa się z dwóch niezależnych modułów, które należy uruchomić osobno: serwera backendowego (`api`) oraz interfejsu użytkownika (`gui`).
+Oraz wtyczki internetowej, którą trzeba rozpakować w trybie developera (`plugin`).
 
 ### 1. Klonowanie repozytorium
 Pobierz projekt na swój dysk i wejdź do głównego folderu:
@@ -77,6 +78,11 @@ npm start
 Wejdź na adres:
 http://localhost:3000/
 
+Instalacja wersji deweloperskiej (ScanRadar):
+Otwórz nową kartę i wpisz adres: 
+chrome://extensions
+Włącz 'Tryb dewelopera' w prawym górnym rogu.
+Kliknij 'Załaduj rozpakowane' i wybierz folder 'plugin' z naszego projektu."
 
 ## Struktura Aplikacji
 ```bash

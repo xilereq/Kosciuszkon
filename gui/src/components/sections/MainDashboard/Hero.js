@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Hero = () => {
     const handleInstallClick = () => {
         alert(
-            "Instalacja wersji deweloperskiej (Hackathon MVP):\n\n" +
+            "Instalacja wersji deweloperskiej (ScanRadar):\n\n" +
             "1. Otwórz nową kartę i wpisz adres: chrome://extensions\n" +
             "2. Włącz 'Tryb dewelopera' w prawym górnym rogu.\n" +
             "3. Kliknij 'Załaduj rozpakowane' i wybierz folder 'plugin' z naszego projektu."
