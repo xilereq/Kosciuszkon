@@ -23,7 +23,7 @@ const FamilyUmbrella = () => {
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-extrabold mb-8">Bezpieczna Sieć Rodzinna</h2>
                 <p className="text-xl text-purple-100 max-w-3xl mx-auto mb-16 leading-relaxed">
-                    Dostań powiadomienie, gdy Twoja Babcia lub Dziadek spróbuje wejść w podejrzany link.
+                    Dostań powiadomienie, gdy twój członek rodziny spróbuje wejść w podejrzany link.
                     Zainterweniuj, zanim stracą oszczędności życia.
                 </p>
 
