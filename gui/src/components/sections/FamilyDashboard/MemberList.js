@@ -10,7 +10,7 @@ const MemberList = ({ family, onOpenReport }) => (
             <div className="w-full flex flex-col gap-3">
                 {family.members.map((member, index) => {
                     const name = typeof member === 'object' ? (member.name || member.username) : member;
-                    const notifications = member.notifications || 0;
+                    const notifications = member.notification_count || 0;
 
                     return (
                         <button key={index} onClick={() => onOpenReport(member)} className="flex items-center justify-between w-full p-4 bg-white border border-purple-50 shadow-sm hover:shadow-lg hover:shadow-purple-500/15 hover:border-purple-200 hover:-translate-y-1 transition-all duration-300 rounded-2xl group">
