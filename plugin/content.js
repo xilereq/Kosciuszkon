@@ -217,7 +217,7 @@ function extractMetadataAndScan(targetElement, rawText, activeContainer) {
       saveAlertToDatabase(payload, apiResult);
       if (apiResult.status === "DANGER") {
         showRedDangerPopup(apiResult.message, apiResult.confidence);
-      } else {
+      } if (apiResult.status === "WARNING") {
         showYellowWarning(apiResult.message, apiResult.confidence);
       }
     }
