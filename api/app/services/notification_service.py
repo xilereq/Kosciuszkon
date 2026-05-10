@@ -12,12 +12,12 @@ def add_notification_to_db(req_data: NotificationCreateRequest,
         user_family_record = db.query(UserFamily).filter_by(
             user_id=user_id).first()
 
-        if not user_family_record:
-            abort(404, "Użytkownik nie należy do rodziny")
+        f_id = user_family_record.family_id \
+            if user_family_record else None
 
         new_notification = Notification(
             user_id=user_id,
-            family_id=user_family_record.family_id,
+            family_id=f_id,
             title=req_data.title,
             sender=req_data.sender,
             probability=req_data.probability,
@@ -40,14 +40,12 @@ def add_notification_to_db(req_data: NotificationCreateRequest,
         db.close()
 
 
-def get_family_notifications_from_db(user_id):
+def get_notifications_from_db(user_id):
     db = session()
     try:
         user_family = db.query(UserFamily).filter_by(
             user_id=user_id).first()
-        if not user_family:
-            abort(404, "Nie należysz do rodziny")
-        if user_family.is_admin:
+        if user_family and user_family.is_admin:
             notifications = db.query(Notification).filter(
                 Notification.family_id == user_family.family_id
             ).order_by(Notification.created_at.desc()).all()
