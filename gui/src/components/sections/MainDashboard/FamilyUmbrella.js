@@ -19,11 +19,11 @@ const FamilyUmbrella = () => {
             <div className="max-w-7xl mx-auto px-4 text-center relative">
                 <div className="inline-flex items-center gap-2 bg-purple-500 px-4 py-2 rounded-full mb-6">
                     <Users className="w-5 h-5" />
-                    <span className="font-bold uppercase tracking-wider text-sm">Family Dashboard</span>
+                    <span className="font-bold uppercase tracking-wider text-sm">Dla Rodziny</span>
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-extrabold mb-8">Bezpieczna Sieć Rodzinna</h2>
                 <p className="text-xl text-purple-100 max-w-3xl mx-auto mb-16 leading-relaxed">
-                    Dostań powiadomienie PUSH, gdy Twoja Babcia lub Dziadek spróbuje wejść w podejrzany link.
+                    Dostań powiadomienie, gdy Twoja Babcia lub Dziadek spróbuje wejść w podejrzany link.
                     Zainterweniuj, zanim stracą oszczędności życia.
                 </p>
 

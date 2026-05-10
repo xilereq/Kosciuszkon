@@ -61,7 +61,7 @@ const Hero = () => {
                                 <AlertTriangle className="w-12 h-12 text-amber-500 shrink-0" />
                                 <div>
                                     <h4 className="text-amber-800 font-bold text-lg">Podejrzany link!</h4>
-                                    <p className="text-amber-700 text-sm md:text-base">Ta strona próbuje wyłudzić Twoje dane do banku. SafeGuard AI zablokował połączenie.</p>
+                                    <p className="text-amber-700 text-sm md:text-base">Ta strona próbuje wyłudzić Twoje dane do banku, ponieważ umieszczone na niej linki prowadzą do fałszywych paneli logowania.</p>
                                 </div>
                             </div>
                             <div className="mt-8 space-y-3">
