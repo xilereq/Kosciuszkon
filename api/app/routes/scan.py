@@ -31,7 +31,7 @@ def analyze():
             content=result.get('message', ''),
             probability=result.get('confidence', 0.0),
             type=NotificationType.EMAIL,
-            created_at=pendulum.now('Europe/Warsaw')
+            created_at=pendulum.now('UTC')
         )
         add_notification_to_db(notification_request, current_user_id)
 
