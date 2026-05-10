@@ -104,7 +104,8 @@ def get_family_members(user_id):
             members_list.append({
                 "name": m.name,
                 "is_admin": m.is_admin,
-                "notification_count": count or 0
+                "notification_count": count or 0,
+                "id": m.user_id,
             })
 
         return {

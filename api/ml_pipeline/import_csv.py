@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.models.training_message import TrainingMessage, Base
+from app.models.training_message import Base, TrainingMessage
 
 max_int = sys.maxsize
 while True:
@@ -14,16 +14,19 @@ while True:
         csv.field_size_limit(max_int)
         break
     except OverflowError:
-        max_int = int(max_int/10)
+        max_int = int(max_int / 10)
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ValueError("Brak zmiennej DATABASE_URL w pliku .env! Upewnij się, że plik istnieje.")
+    raise ValueError(
+        "Brak zmiennej DATABASE_URL w pliku .env! Upewnij się, "
+        "że plik istnieje.")
 
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False,
+                            bind=engine)
 
 
 def import_emails_from_csv(file_path):
@@ -60,7 +63,9 @@ def import_emails_from_csv(file_path):
             db.commit()
 
             print(
-                f"Sukces! Odfiltrowano i zaimportowano {len(messages_to_add)} wiadomości do bazy zdefiniowanej w .env.")
+                f"Sukces! Odfiltrowano i zaimportowano "
+                f"{len(messages_to_add)} wiadomości do bazy "
+                f"zdefiniowanej w .env.")
 
     except FileNotFoundError:
         print(f"Błąd: Nie znaleziono pliku {file_path}")

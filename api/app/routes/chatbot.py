@@ -1,20 +1,25 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 
 from app.services.chatbot_service import generate_chat_response
 
 chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')
+
 
 @chat_bp.route('/message', methods=['POST'])
 def handle_chat_message():
     data = request.get_json()
 
     if not data or 'messages' not in data:
-        return jsonify({"error": "Brak pola 'messages' zawierającego historię konwersacji."}), 400
+        return jsonify({
+                           "error": "Brak pola 'messages' "
+                                    "zawierającego historię "
+                                    "konwersacji."}), 400
 
     messages = data['messages']
 
     if not isinstance(messages, list):
-        return jsonify({"error": "Pole 'messages' musi być listą obiektów."}), 400
+        return jsonify(
+            {"error": "Pole 'messages' musi być listą obiektów."}), 400
 
     recent_messages = messages[-10:]
 

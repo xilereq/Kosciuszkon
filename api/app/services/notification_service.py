@@ -45,16 +45,16 @@ def get_family_notifications_from_db(user_id):
     try:
         user_family = db.query(UserFamily).filter_by(
             user_id=user_id).first()
-
         if not user_family:
             abort(404, "Nie należysz do rodziny")
-
-        if not user_family.is_admin:
-            abort(403, "Brak uprawnień administratora rodziny")
-
-        notifications = db.query(Notification).filter(
-            Notification.family_id == user_family.family_id
-        )
+        if user_family.is_admin:
+            notifications = db.query(Notification).filter(
+                Notification.family_id == user_family.family_id
+            ).order_by(Notification.created_at.desc()).all()
+        else:
+            notifications = db.query(Notification).filter(
+                Notification.user_id == user_id
+            ).order_by(Notification.created_at.desc()).all()
         return notifications
     except Exception as ex:
         db.rollback()
@@ -91,5 +91,21 @@ def remove_notification_from_db(notification_id, user_id):
             print(f"Błąd usuwania: {ex}")
             return False
         raise ex
+    finally:
+        db.close()
+
+
+def get_latest_notification_by_user_id(user_id):
+    db = session()
+    try:
+        latest = db.query(Notification).filter(
+            Notification.user_id == user_id
+        ).order_by(Notification.created_at.desc()).first()
+        return latest
+    except Exception as ex:
+        print(
+            f"Błąd przy pobieraniu najnowszego powiadomienia "
+            f"dla użytkownika {user_id}: {ex}")
+        return None
     finally:
         db.close()
