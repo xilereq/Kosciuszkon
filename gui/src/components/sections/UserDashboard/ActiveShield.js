@@ -63,7 +63,6 @@ const ActiveShield = ({ events = [], onDelete, canDelete = false }) => {
                         }
                     }
 
-                    // Spróbuj różnych pól identyfikatora — zabezpieczenie przed undefined
                     const itemId = evt.id ?? evt._id ?? evt.notification_id ?? evt.notificationId;
 
                     return (
