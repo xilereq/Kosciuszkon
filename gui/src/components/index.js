@@ -7,7 +7,6 @@ export {default as Navbar} from './layout/Navbar'
 export {default as Hero} from './sections/MainDashboard/Hero'
 export {default as Features} from './sections/MainDashboard/Features'
 export {default as FamilyUmbrella} from './sections/MainDashboard/FamilyUmbrella'
-export {default as Partners} from './sections/MainDashboard/Partners'
 
 export {default as AnalysisLab} from './sections/UserDashboard/AnalysisLab'
 export {default as ActiveShield} from './sections/UserDashboard/ActiveShield'
