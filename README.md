@@ -43,12 +43,12 @@ Bezpieczny sandbox. Użytkownik wkleja dowolny e-mail, SMS, a system (korzystaj�
 Część serwerowa (API) została zaprojektowana z myślą o wysokiej wydajności, bezpieczeństwie i dokładności predykcji. Wykorzystany stack technologiczny:
 
 * **Framework:** Python / Flask (`flask`, `flask-cors`, `flask-jwt-extended`)
-* **Baza Danych:** PostgreSQL / SQLite (`sqlalchemy>=2.0`, `psycopg2-binary`)
+* **Baza Danych:** PostgreSQL / SQLAlchemy (`sqlalchemy>=2.0`, `psycopg2-binary`)
 * **Machine Learning:** Scikit-Learn (TF-IDF, Logistic Regression), `pandas`, `joblib`
 * **Sztuczna Inteligencja (LLM):** Google Gemini (`google-genai`) oraz Groq API (`groq`)
 * **Przetwarzanie Języka:** Automatyczna detekcja i tłumaczenie (`langdetect`, `deep_translator`)
 * **Walidacja i DTO:** Ścisła kontrola typów (`pydantic`)
-* **Infrastruktura i Testy:** Zarządzanie środowiskiem i testy automatyczne (`python-dotenv`, `pytest`)
+* **Infrastruktura i Testy:** Zarządzanie środowiskiem i testy (`python-dotenv`, `pytest`)
 
 * ## Instalacja i Uruchomienie
 
