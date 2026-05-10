@@ -29,7 +29,7 @@ const Hero = () => {
                         Twoja Tarcza w <span className="bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">Cyfrowym Świecie.</span>
                     </h1>
                     <p className="text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
-                        Kompleksowa ochrona przed phishingiem, prosta edukacja i cyfrowy parasol nad Twoimi bliskimi.
+                        Kompleksowa ochrona przed phishingiem, prosta edukacja i Bezpieczna Sieć Rodzinna dla twoich bliskich.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4">
                         <button
