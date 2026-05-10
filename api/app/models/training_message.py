@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text
+
 from app.db import Base
+
 
 class TrainingMessage(Base):
     __tablename__ = 'training_messages'

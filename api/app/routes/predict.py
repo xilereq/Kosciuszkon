@@ -1,10 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 
-from app.services.translation_service import detect_language, translate_to_english
+from app.schemas.predict_schema import PredictionDetails, \
+    PredictRequest, PredictResponse
+from app.services import generate_spam_explanation
 from app.services.predict_service import get_prediction
-from app.services.llm_service import generate_spam_explanation
-from app.schemas.predict_schema import PredictRequest, PredictResponse, PredictionDetails
+from app.services.translation_service import detect_language, \
+    translate_to_english
 
 predict_bp = Blueprint('predict', __name__, url_prefix='/api/predict')
 
@@ -15,7 +17,8 @@ def _process_prediction(msg_type: str):
     try:
         req = PredictRequest(**json_data)
     except ValidationError as e:
-        return jsonify({"error": "Błąd walidacji danych wejściowych", "details": e.errors()}), 400
+        return jsonify({"error": "Błąd walidacji danych wejściowych",
+                        "details": e.errors()}), 400
 
     try:
         original_text = req.text

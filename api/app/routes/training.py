@@ -1,21 +1,24 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.schemas.training_schema import RandomMessageResponse, SwipeRequest, SwipeResponse
-from app.services.training_service import get_random_training_message, process_user_swipe
+from app.schemas import RandomMessageResponse, \
+    SwipeRequest, SwipeResponse
+from app.services import get_random_training_message, \
+    process_user_swipe
 
-training_bp = Blueprint('training', __name__, url_prefix='/api/training')
-
+training_bp = Blueprint('training', __name__,
+                        url_prefix='/api/training')
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False,
+                            bind=engine)
 
 
 def get_db():
@@ -25,6 +28,7 @@ def get_db():
     except Exception as e:
         db.close()
         raise e
+
 
 @training_bp.route('/random', methods=['GET'])
 def get_random_message():
@@ -42,6 +46,7 @@ def get_random_message():
     finally:
         db_session.close()
 
+
 @training_bp.route('/swipe', methods=['POST'])
 def handle_swipe():
     json_data = request.get_json() or {}
@@ -49,11 +54,13 @@ def handle_swipe():
     try:
         req = SwipeRequest(**json_data)
     except ValidationError as e:
-        return jsonify({"error": "Błąd walidacji wejścia", "details": e.errors()}), 400
+        return jsonify({"error": "Błąd walidacji wejścia",
+                        "details": e.errors()}), 400
 
     db_session = get_db()
     try:
-        result = process_user_swipe(db_session, req.message_id, req.guess)
+        result = process_user_swipe(db_session, req.message_id,
+                                    req.guess)
 
         response_obj = SwipeResponse(**result)
         return jsonify(response_obj.model_dump()), 200
