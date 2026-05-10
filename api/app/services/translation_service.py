@@ -28,3 +28,14 @@ def translate_to_english(text: str) -> str:
     except Exception as e:
         logger.error(f"Błąd podczas tłumaczenia tekstu: {e}")
         return text
+
+def translate_to_polish(text: str) -> str:
+    if not text or not text.strip():
+        return text
+
+    try:
+        translated_text = GoogleTranslator(source='auto', target='polish').translate(text)
+        return translated_text
+    except Exception as e:
+        logger.error(f"Błąd podczas tłumaczenia tekstu: {e}")
+        return text
