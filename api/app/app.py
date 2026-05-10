@@ -7,7 +7,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
 from app.db import Base, engine
-from app.services.predict_service import load_models
+from app.services import load_models
 
 load_dotenv()
 

@@ -11,3 +11,5 @@ from .predict_service import get_prediction, load_models
 from .scan_services import analyze_text_content
 from .training_service import get_random_training_message, \
     process_user_swipe
+from .chatbot_service import generate_chat_response
+from .translation_service import detect_language, translate_to_english

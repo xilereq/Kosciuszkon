@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 
-from app.schemas.predict_schema import PredictionDetails, \
+from app.schemas import PredictionDetails, \
     PredictRequest, PredictResponse
 from app.services import generate_spam_explanation
-from app.services.predict_service import get_prediction
-from app.services.translation_service import detect_language, \
+from app.services import get_prediction
+from app.services import detect_language, \
     translate_to_english
 
 predict_bp = Blueprint('predict', __name__, url_prefix='/api/predict')

@@ -6,6 +6,8 @@ from .family_response import AddFamilyMemberResponse, \
 from .notification_schemas import NotificationCreateRequest, \
     NotificationResponse, NotificationsList
 from .notification_type import NotificationType
+from .predict_schema import PredictionDetails, PredictRequest, \
+    PredictResponse
 from .scan_schemas import ScanRequest, ScanResponse
 from .training_schema import RandomMessageResponse, SwipeRequest, \
     SwipeResponse

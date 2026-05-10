@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.models.training_message import Base, TrainingMessage
+from app.db import Base
+from app.models import TrainingMessage
 
 max_int = sys.maxsize
 while True:
