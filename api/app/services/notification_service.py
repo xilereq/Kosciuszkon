@@ -93,3 +93,19 @@ def remove_notification_from_db(notification_id, user_id):
         raise ex
     finally:
         db.close()
+
+
+def get_latest_notification_by_user_id(user_id):
+    db = session()
+    try:
+        latest = db.query(Notification).filter(
+            Notification.user_id == user_id
+        ).order_by(Notification.created_at.desc()).first()
+        return latest
+    except Exception as ex:
+        print(
+            f"Błąd przy pobieraniu najnowszego powiadomienia "
+            f"dla użytkownika {user_id}: {ex}")
+        return None
+    finally:
+        db.close()
