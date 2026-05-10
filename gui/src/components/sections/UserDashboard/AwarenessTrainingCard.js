@@ -56,7 +56,7 @@ const AwarenessTrainingCard = () => {
 
             setFeedback({
                 isCorrect,
-                message: isCorrect ? 'Zgadłeś! 🎉' : 'Niedobrze... 😞',
+                message: isCorrect ? 'Poprawnie' : 'Niedobrze... ',
                 explanation: result.explanation || '',
                 trueLabel: result.true_label,
             });
@@ -282,7 +282,6 @@ const AwarenessTrainingCard = () => {
                 </AnimatePresence>
             </div>
 
-            {/* Przycisk końca sesji (dolny) */}
             <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

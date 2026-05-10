@@ -11,21 +11,19 @@ const ActiveShield = ({ events }) => (
         <div className="divide-y border-b border-slate-100 last:border-0 max-h-[360px] overflow-y-auto">
             {events.length > 0 ? events.map((evt, index) => {
 
-                // --- LOGIKA KOLORÓW I IKON ---
                 let iconBgColor = 'bg-slate-100 text-slate-600';
                 let titleColor = 'text-slate-800';
                 let Icon = evt.type === 'sms' ? Smartphone : Mail;
 
                 if (evt.isThreat) {
-                    // Sprawdzamy czy prawdopodobieństwo przekracza 80% (0.8 lub 80)
                     const isHighRisk = evt.probability > 0.8 || evt.probability > 80;
 
                     if (isHighRisk) {
-                        iconBgColor = 'bg-red-100 text-red-600'; // Czerwone zagrożenie
+                        iconBgColor = 'bg-red-100 text-red-600';
                         titleColor = 'text-red-900';
                         Icon = AlertTriangle;
                     } else {
-                        iconBgColor = 'bg-yellow-100 text-yellow-600'; // Żółte ostrzeżenie
+                        iconBgColor = 'bg-yellow-100 text-yellow-600';
                         titleColor = 'text-yellow-900';
                         Icon = AlertCircle;
                     }
