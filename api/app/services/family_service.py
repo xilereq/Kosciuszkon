@@ -19,6 +19,12 @@ def add_new_family(owner_id, request_data: FamilyCreateRequest):
             name=request_data.name
         )
         db.add(user_family)
+        db.query(Notification).filter(
+            Notification.user_id == owner_id).update(
+            {Notification.family_id: new_family.id},
+            synchronize_session=False
+        )
+
         db.commit()
         db.refresh(new_family)
         return new_family
@@ -57,6 +63,14 @@ def join_family_by_name(user_id, request_data: FamilyJoinRequest):
         )
 
         db.add(new_member)
+
+        db.query(Notification).filter(
+            Notification.user_id == user_id
+        ).update(
+            {Notification.family_id: family.id},
+            synchronize_session=False
+        )
+
         db.commit()
         return {
             "family_name": family.family_name,

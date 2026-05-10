@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from app.schemas import NotificationCreateRequest, \
     NotificationResponse, NotificationsList
 from app.services import add_notification_to_db, \
-    get_family_notifications_from_db, remove_notification_from_db
+    get_notifications_from_db, remove_notification_from_db
 
 notification_bp = Blueprint('notification', __name__,
                             url_prefix='/api/notification')
@@ -37,7 +37,7 @@ def add_new_notification():
 def get_my_notifications():
     current_user_id = get_jwt_identity()
 
-    notifications_data = get_family_notifications_from_db(
+    notifications_data = get_notifications_from_db(
         current_user_id)
 
     if notifications_data is None:

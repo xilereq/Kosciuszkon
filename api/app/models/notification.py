@@ -10,8 +10,7 @@ class Notification(Base):
     __tablename__ = 'notifications'
 
     id = Column(Integer, primary_key=True)
-    family_id = Column(Integer, ForeignKey('families.id'),
-                       nullable=False)
+    family_id = Column(Integer, ForeignKey('families.id'))
     user_id = Column(Integer, ForeignKey('users.id'),
                      nullable=False)
     title = Column(String(2000), nullable=False)
