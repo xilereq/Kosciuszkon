@@ -64,3 +64,32 @@ def get_family_notifications_from_db(user_id):
         raise ex
     finally:
         db.close()
+
+
+def remove_notification_from_db(notification_id, user_id):
+    db = session()
+    try:
+        notification = db.query(Notification).filter_by(
+            id=notification_id).first()
+
+        if not notification:
+            abort(404, "Powiadomienie nie istnieje")
+
+        user_family = db.query(UserFamily).filter_by(
+            user_id=user_id).first()
+        if (not user_family or user_family.family_id
+                != notification.family_id):
+            abort(403,
+                  "Nie masz uprawnień do usunięcia tego powiadomienia")
+
+        db.delete(notification)
+        db.commit()
+        return True
+    except Exception as ex:
+        db.rollback()
+        if not hasattr(ex, 'code'):
+            print(f"Błąd usuwania: {ex}")
+            return False
+        raise ex
+    finally:
+        db.close()
