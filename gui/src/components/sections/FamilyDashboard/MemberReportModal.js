@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, History, Smartphone, Mail, Clock, ShieldAlert, MapPin, AlertOctagon } from 'lucide-react';
+import { X, History, Smartphone, Mail, Clock, ShieldAlert, MapPin, AlertOctagon, Loader } from 'lucide-react';
+import { FamilyService } from '../../../services';
 
-const MemberReportModal = ({ member, events, isLoading, onClose }) => (
+const MemberReportModal = ({ member, isOpen, onClose }) => {
+    const [events, setEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (isOpen && member && (member.id || member.user_id)) {
+            loadMemberData();
+        }
+    }, [isOpen, member]);
+
+    const loadMemberData = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const memberId = member.id || member.user_id;
+            const memberEvents = await FamilyService.getMemberEvents(memberId);
+            setEvents(Array.isArray(memberEvents) ? memberEvents : []);
+        } catch (err) {
+            console.error('Błąd podczas pobierania danych członka:', err);
+            setError('Nie udało się załadować danych. Spróbuj ponownie.');
+            setEvents([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
     <AnimatePresence>
-        {member && (
+        {isOpen && member && (
             <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
                 <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative w-full max-w-lg bg-white rounded-[32px] p-8 shadow-2xl">
@@ -14,7 +42,7 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                     </div>
 
                     <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-2xl mb-6">
-                        <div className="h-12 w-12 rounded-full flex items-center justify-center text-white font-bold bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-md shadow-purple-200">{(member.name || 'U').slice(0,1)}</div>
+                        <div className="h-12 w-12 rounded-full flex items-center justify-center text-white font-bold bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-md shadow-purple-200">{(member.name || member.username || 'U').slice(0,1)}</div>
                         <div>
                             <div className="font-bold">{member.name || member.username}</div>
                             <div className="text-sm text-slate-500 flex items-center gap-1"><History size={14} /> Ostatnie incydenty</div>
@@ -23,21 +51,31 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
 
                     <div className="space-y-4 max-h-[340px] overflow-y-auto pr-2">
                         {isLoading ? (
-                            <div className="text-center py-10">Ładowanie...</div>
+                            <div className="text-center py-10 flex flex-col items-center justify-center gap-3">
+                                <Loader className="animate-spin text-purple-600" size={32} />
+                                <span className="text-slate-600">Ładowanie danych...</span>
+                            </div>
+                        ) : error ? (
+                            <div className="text-center py-10">
+                                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl">
+                                    <AlertOctagon className="mx-auto mb-2 text-red-500" size={24} />
+                                    <p className="font-semibold">{error}</p>
+                                </div>
+                            </div>
                         ) : (
-                            events.length > 0 ? events.map(evt => (
+                                            events.length > 0 ? events.map(evt => (
                                 <div key={evt.id} className="relative">
                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500 rounded-l-2xl" />
 
                                     <div className="flex flex-col gap-3 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden ml-3">
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center gap-3">
-                                                <div className={`p-2 rounded-lg ${evt.type === 'sms' ? 'bg-amber-100 text-amber-600' : 'bg-purple-100 text-purple-600'}`}>
-                                                    {evt.type === 'sms' ? <Smartphone size={20} /> : <Mail size={20} />}
+                                                <div className={`p-2 rounded-lg ${evt.type === 'sms' || evt.type === 'SMS' ? 'bg-amber-100 text-amber-600' : 'bg-purple-100 text-purple-600'}`}>
+                                                    {evt.type === 'sms' || evt.type === 'SMS' ? <Smartphone size={20} /> : <Mail size={20} />}
                                                 </div>
                                                 <div>
                                                     <div className="font-bold text-slate-800">{evt.title || 'Zdarzenie'}</div>
-                                                    <div className="text-xs text-slate-400">{evt.type?.toUpperCase()}</div>
+                                                    <div className="text-xs text-slate-400">{evt.type?.toUpperCase() || 'NIEZNANY'}</div>
                                                 </div>
                                             </div>
 
@@ -65,11 +103,12 @@ const MemberReportModal = ({ member, events, isLoading, onClose }) => (
                         )}
                     </div>
 
-                    <button onClick={onClose} className="w-full mt-8 py-4 bg-slate-900 text-white font-bold rounded-2xl">Zamknij</button>
+                    <button onClick={onClose} className="w-full mt-8 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition-colors">Zamknij</button>
                 </motion.div>
             </div>
         )}
     </AnimatePresence>
-);
+    );
+};
 
 export default MemberReportModal;

@@ -39,7 +39,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         ) : (
                             <>
                                 <Link to="/" className="hover:text-purple-600 transition">Mój Panel</Link>
-                                {/* Poniższy link jest teraz widoczny dla każdego zalogowanego */}
                                 <Link to="/family" className="hover:text-purple-600 transition">Dla Rodziny</Link>
                                 <button
                                     onClick={handleLogout}
@@ -69,7 +68,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                         ) : (
                             <>
                                 <Link to="/">Mój Panel</Link>
-                                {/* Poniższy link jest teraz widoczny dla każdego zalogowanego w mobile */}
                                 <Link to="/family">Dla Rodziny</Link>
                                 <button onClick={handleLogout} className="text-left text-red-600 font-bold">Wyloguj się</button>
                             </>

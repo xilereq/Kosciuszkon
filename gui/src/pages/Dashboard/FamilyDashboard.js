@@ -6,8 +6,7 @@ import { ShieldCheck } from 'lucide-react';
 const FamilyDashboard = () => {
     const [family, setFamily] = useState(null);
     const [selectedMember, setSelectedMember] = useState(null);
-    const [memberEvents, setMemberEvents] = useState([]);
-    const [isModalLoading, setIsModalLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSupervisor, setIsSupervisor] = useState(null);
 
     const loadFamilyData = async () => {
@@ -34,21 +33,18 @@ const FamilyDashboard = () => {
 
     useEffect(() => { loadFamilyData(); }, []);
 
-    const openMemberReport = async (member) => {
+    const openMemberReport = (member) => {
         if (!isSupervisor) {
             alert("Tylko administrator rodziny może przeglądać szczegółowe raporty.");
             return;
         }
         setSelectedMember(member);
-        setIsModalLoading(true);
-        try {
-            const events = await FamilyService.getMemberEvents(member.id || 1);
-            setMemberEvents(events);
-        } catch (err) {
-            setMemberEvents([
-                { id: 1, type: 'sms', date: '2024-05-20', time: '14:32', source: 'Nadawca: DPD-Info', threatType: 'Phishing (Wyłudzenie danych)', title: 'Podejrzany link do płatności', desc: 'System AI wykrył i zablokował podejrzany link prowadzący do fałszywej strony płatności. Użytkownik został powiadomiony, link został zidentyfikowany jako próba wyłudzenia danych karty.' }
-            ]);
-        } finally { setIsModalLoading(false); }
+        setIsModalOpen(true);
+    };
+
+    const closeMemberReport = () => {
+        setIsModalOpen(false);
+        setSelectedMember(null);
     };
 
     if (isSupervisor === null) return <div className="min-h-screen bg-slate-50 flex justify-center items-center font-bold">Ładowanie...</div>;
@@ -95,9 +91,8 @@ const FamilyDashboard = () => {
 
             <MemberReportModal
                 member={selectedMember}
-                events={memberEvents}
-                isLoading={isModalLoading}
-                onClose={() => setSelectedMember(null)}
+                isOpen={isModalOpen}
+                onClose={closeMemberReport}
             />
         </div>
     );

@@ -56,7 +56,7 @@ const AwarenessTrainingCard = () => {
 
             setFeedback({
                 isCorrect,
-                message: isCorrect ? 'Zgadłeś! 🎉' : 'Niedobrze... 😞',
+                message: isCorrect ? 'Poprawnie' : 'Niedobrze... ',
                 explanation: result.explanation || '',
                 trueLabel: result.true_label,
             });
@@ -85,7 +85,6 @@ const AwarenessTrainingCard = () => {
         statsRef.current = { correct: 0, total: 0 };
     };
 
-    // Widok początkowy - karty zachęcająca
     if (!isPlaying) {
         return (
             <motion.div
@@ -113,7 +112,6 @@ const AwarenessTrainingCard = () => {
         );
     }
 
-    // Widok gry
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -123,7 +121,6 @@ const AwarenessTrainingCard = () => {
         >
             <div className="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-purple-600/30 blur-2xl pointer-events-none" />
 
-            {/* Nagłówek */}
             <div className="flex items-center justify-between mb-6 relative z-10">
                 <div className="flex items-center gap-3">
                     <Gamepad2 className="w-8 h-8 text-purple-300" />
@@ -138,7 +135,6 @@ const AwarenessTrainingCard = () => {
                 </button>
             </div>
 
-            {/* Statystyki */}
             {statsRef.current.total > 0 && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -151,7 +147,6 @@ const AwarenessTrainingCard = () => {
                 </motion.div>
             )}
 
-            {/* Zawartość gry */}
             <div className="flex-1 flex flex-col justify-center relative z-10">
                 {isLoading ? (
                     <motion.div
@@ -170,7 +165,6 @@ const AwarenessTrainingCard = () => {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="space-y-6"
                     >
-                        {/* Karta wiadomości */}
                         <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
                             <p className="text-sm text-purple-200 mb-4 font-semibold">
                                 Typ: <span className="text-purple-100">{currentMessage.type === 'email' ? '📧 Email' : '📱 SMS'}</span>
@@ -180,7 +174,6 @@ const AwarenessTrainingCard = () => {
                             </p>
                         </div>
 
-                        {/* Przyciski do oceny */}
                         <div className="grid grid-cols-2 gap-4">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
@@ -207,7 +200,6 @@ const AwarenessTrainingCard = () => {
                     </motion.div>
                 ) : null}
 
-                {/* Feedback Modal */}
                 <AnimatePresence>
                     {showFeedback && feedback && (
                         <motion.div
@@ -282,7 +274,6 @@ const AwarenessTrainingCard = () => {
                 </AnimatePresence>
             </div>
 
-            {/* Przycisk końca sesji (dolny) */}
             <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

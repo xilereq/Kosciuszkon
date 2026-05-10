@@ -14,7 +14,6 @@ const Hero = () => {
     };
     return (
         <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 relative overflow-hidden">
-            {/* Tło - poprawiona warstwa z-index i pozycjonowanie */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
                 <div className="absolute -top-[10%] -left-[5%] w-[60%] h-[60%] rounded-full bg-purple-300/20 blur-[120px]" />
                 <div className="absolute top-[10%] -right-[5%] w-[50%] h-[50%] rounded-full bg-fuchsia-300/20 blur-[120px]" />
