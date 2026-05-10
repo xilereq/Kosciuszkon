@@ -34,6 +34,8 @@ const UserDashboard = () => {
 
                 if (data && data.notifications) {
                     const mappedEvents = data.notifications.map(notif => ({
+                        id: notif.id ?? notif._id ?? notif.notification_id ?? notif.notificationId,
+                        notifId: notif.id ?? notif._id ?? notif.notification_id ?? notif.notificationId ?? notif.notification?.id ?? notif.notification?._id ?? null,
                         title: notif.title,
                         description: notif.content,
                         date: new Date(notif.created_at).toLocaleString(),
@@ -79,7 +81,7 @@ const UserDashboard = () => {
                         </motion.div>
 
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.45 }}>
-                            <ActiveShield events={events} />
+                            <ActiveShield events={events} onDelete={(id) => setEvents(prev => prev.filter(e => (e.id ?? e._id ?? e.notifId) !== id))} canDelete={isSupervisor} />
                         </motion.div>
                     </main>
                 </div>
