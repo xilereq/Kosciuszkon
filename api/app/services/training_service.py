@@ -4,6 +4,7 @@ from sqlalchemy.sql.expression import func
 
 from app.models.training_message import TrainingMessage
 from app.services.llm_service import generate_training_explanation
+from app.services.translation_service import translate_to_polish
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +15,10 @@ def get_random_training_message(db_session):
     if not msg:
         raise ValueError("Brak wiadomości treningowych w bazie danych. Wykonaj import z pliku CSV.")
 
+    text = translate_to_polish(msg.text)
     return {
         "message_id": str(msg.id),
-        "text": msg.text,
+        "text": text,
         "type": msg.msg_type
     }
 
